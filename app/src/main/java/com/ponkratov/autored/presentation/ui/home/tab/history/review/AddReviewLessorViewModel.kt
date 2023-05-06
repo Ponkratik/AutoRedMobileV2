@@ -76,7 +76,7 @@ class AddReviewLessorViewModel(
 
         reviewCar = ReviewCar(
             mark = markCar,
-            comment = commentUser,
+            comment = commentCar,
             userFrom = getJwtResponseUseCase().id,
             carTo = carTo
         )

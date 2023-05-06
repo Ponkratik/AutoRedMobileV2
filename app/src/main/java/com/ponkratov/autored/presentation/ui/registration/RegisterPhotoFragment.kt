@@ -20,10 +20,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import com.ponkratov.autored.BuildConfig
 import com.ponkratov.autored.databinding.FragmentRegisterPhotoBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.android.BuildConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -211,7 +211,7 @@ class RegisterPhotoFragment : Fragment() {
 
         return FileProvider.getUriForFile(
             requireContext(),
-            "${BuildConfig.APPLICATION_ID}.provider",
+            "${BuildConfig.LIBRARY_PACKAGE_NAME}.provider",
             tmpFile
         )
     }
