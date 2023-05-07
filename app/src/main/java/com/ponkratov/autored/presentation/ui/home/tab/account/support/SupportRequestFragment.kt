@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.ponkratov.autored.databinding.FragmentSupportRequestBinding
-import com.ponkratov.autored.presentation.ui.login.LoginFragmentDirections
+import com.ponkratov.autored.domain.model.Lce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,44 +49,35 @@ class SupportRequestFragment : Fragment() {
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    progressCircular.isVisible = true
-                    layoutRequest.isVisible = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutRequest.isVisible = true
-                    Snackbar.make(
-                        requireView(),
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutRequest.isVisible = true
-                    editTextSupportRequest.text?.clear()
-                    AlertDialog
-                        .Builder(requireContext())
-                        .setTitle("Сообщение в службу тех.поддержки")
-                        .setMessage(it)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .getResponseFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                    when (it) {
+                        is Lce.Loading -> {
+                            progressCircular.isVisible = true
+                            layoutRequest.isVisible = false
+                        }
+                        is Lce.Success -> {
+                            progressCircular.isVisible = false
+                            layoutRequest.isVisible = true
+                            editTextSupportRequest.text?.clear()
+                            AlertDialog
+                                .Builder(requireContext())
+                                .setTitle("Сообщение в службу тех.поддержки")
+                                .setMessage(it.data)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show()
+                        }
+                        is Lce.Error -> {
+                            progressCircular.isVisible = false
+                            layoutRequest.isVisible = true
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 
