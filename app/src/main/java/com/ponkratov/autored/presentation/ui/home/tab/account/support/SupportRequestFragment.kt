@@ -56,7 +56,7 @@ class SupportRequestFragment : Fragment() {
                             progressCircular.isVisible = true
                             layoutRequest.isVisible = false
                         }
-                        is Lce.Success -> {
+                        is Lce.Content -> {
                             progressCircular.isVisible = false
                             layoutRequest.isVisible = true
                             editTextSupportRequest.text?.clear()

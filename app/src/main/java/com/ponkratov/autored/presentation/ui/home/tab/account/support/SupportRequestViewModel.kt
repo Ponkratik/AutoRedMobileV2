@@ -31,7 +31,7 @@ class SupportRequestViewModel(
         .onEach { request ->
             createSupportRequestUseCase(request).fold(
                 onSuccess = {
-                    lceFlow.tryEmit(Lce.Success(it))
+                    lceFlow.tryEmit(Lce.Content(it))
                 },
                 onFailure = {
                     lceFlow.tryEmit(Lce.Error(it.message))
