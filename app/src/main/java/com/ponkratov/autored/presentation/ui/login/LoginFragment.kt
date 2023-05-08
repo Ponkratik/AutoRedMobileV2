@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.ponkratov.autored.databinding.FragmentLoginBinding
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.presentation.extensions.hideKeyboard
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -61,37 +62,28 @@ class LoginFragment : Fragment() {
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    progressCircular.isVisible = true
-                    layoutLogin.isVisible = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutLogin.isVisible = true
-                    Snackbar.make(
-                        requireView(),
-                        it,
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    findNavController().navigate(LoginFragmentDirections.actionLoginToHome())
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .loginFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                    when (it) {
+                        is Lce.Loading -> {
+                            progressCircular.isVisible = true
+                            layoutLogin.isVisible = false
+                        }
+                        is Lce.Content -> {
+                            progressCircular.isVisible = false
+                            findNavController().navigate(LoginFragmentDirections.actionLoginToHome())
+                        }
+                        is Lce.Error -> {
+                            progressCircular.isVisible = false
+                            layoutLogin.isVisible = true
+                            Snackbar.make(
+                                requireView(),
+                                it.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

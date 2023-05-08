@@ -6,12 +6,13 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val repositoryModule = module {
+
     single {
         AuthRepositoryImpl(get())
     } bind AuthRepository::class
 
     single {
-        SharedPrefsRepositoryImpl(get())
+        SharedPrefsRepositoryImpl(get(), get())
     } bind SharedPrefsRepository::class
 
     single {
@@ -29,4 +30,8 @@ val repositoryModule = module {
     single {
         ReviewRepositoryImpl(get())
     } bind ReviewRepository::class
+
+    single {
+        FirebaseUserRepositoryImpl(get())
+    } bind FirebaseUserRepository::class
 }

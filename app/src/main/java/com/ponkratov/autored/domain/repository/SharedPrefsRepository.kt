@@ -7,4 +7,8 @@ interface SharedPrefsRepository {
     fun getJwt(): JwtResponse
 
     fun putJwt(jwtResponse: JwtResponse)
+
+    fun getIdToken(): String
+
+    fun putIdToken(idToken: String)
 }

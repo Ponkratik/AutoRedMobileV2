@@ -23,4 +23,6 @@ val useCaseModule = module {
     singleOf(::EndRideUseCase)
     singleOf(::SignActByLessorUseCase)
     singleOf(::SignActByLesseeUseCase)
+    singleOf(::ResetPasswordUseCase)
+    singleOf(::SendVerificationEmailUseCase)
 }

@@ -1,12 +1,12 @@
 package com.ponkratov.autored.domain.usecase
 
-import com.ponkratov.autored.domain.model.request.LoginRequest
-import com.ponkratov.autored.domain.model.response.JwtResponse
-import com.ponkratov.autored.domain.repository.AuthRepository
+import com.google.firebase.auth.AuthResult
+import com.ponkratov.autored.domain.model.FirebaseUser
+import com.ponkratov.autored.domain.repository.FirebaseUserRepository
 
 class LoginUseCase(
-    private val authRepository: AuthRepository
+    private val firebaseUserRepository: FirebaseUserRepository
 ) {
-    suspend operator fun invoke(loginRequest: LoginRequest): Result<JwtResponse> =
-        authRepository.login(loginRequest)
+    suspend operator fun invoke(firebaseUser: FirebaseUser): Result<AuthResult> =
+        firebaseUserRepository.authenticate(firebaseUser)
 }

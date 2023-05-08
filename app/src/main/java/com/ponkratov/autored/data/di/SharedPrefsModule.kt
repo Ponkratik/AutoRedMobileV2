@@ -3,6 +3,7 @@ package com.ponkratov.autored.data.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.ponkratov.autored.data.sharedprefs.IdTokenSharedPrefs
 import com.ponkratov.autored.data.sharedprefs.JwtSharedPrefs
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -13,6 +14,7 @@ val sharedPrefsModule = module {
     }
 
     singleOf(::JwtSharedPrefs)
+    singleOf(::IdTokenSharedPrefs)
 }
 
 fun provideSharedPref(app: Application): SharedPreferences {
