@@ -1,9 +1,7 @@
 package com.ponkratov.autored.data.api
 
-import com.ponkratov.autored.data.model.request.LoginRequestDTO
 import com.ponkratov.autored.data.model.request.RegisterRequestDTO
-import com.ponkratov.autored.data.model.response.JwtResponseDTO
-import com.ponkratov.autored.data.model.response.MessageResponse
+import com.ponkratov.autored.data.model.response.MessageResponseDTO
 import okhttp3.MultipartBody
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -18,11 +16,5 @@ interface AuthApi {
         @Part avatarPhoto: MultipartBody.Part,
         @Part passportPhoto: MultipartBody.Part,
         @Part driverLicensePhoto: MultipartBody.Part
-    ): MessageResponse
-
-    @Multipart
-    @POST("auth/login")
-    suspend fun login(
-        @Part("loginRequest") loginRequest: LoginRequestDTO
-    ): JwtResponseDTO
+    ): MessageResponseDTO
 }

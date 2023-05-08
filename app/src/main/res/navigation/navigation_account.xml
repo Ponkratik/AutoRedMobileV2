@@ -80,7 +80,7 @@
         android:name="com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review.AddReviewLesseeFragment"
         tools:layout="@layout/fragment_add_review_lessee" >
         <argument android:name="lessorId"
-            app:argType="long"/>
+            app:argType="string"/>
     </fragment>
 
     <fragment

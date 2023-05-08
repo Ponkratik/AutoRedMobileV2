@@ -21,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.ponkratov.autored.databinding.FragmentRegisterPhotoBinding
+import com.ponkratov.autored.domain.model.Lce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.BuildConfig
@@ -168,37 +169,28 @@ class RegisterPhotoFragment : Fragment() {
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    progressCircular.isVisible = true
-                    layoutRegisterPhotos.isVisible = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutRegisterPhotos.isVisible = true
-                    Snackbar.make(
-                        requireView(),
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    findNavController().navigate(RegisterPhotoFragmentDirections.actionRegisterPhotoToRegisterWait())
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .registerFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                    when (it) {
+                        is Lce.Loading -> {
+                            progressCircular.isVisible = true
+                            layoutRegisterPhotos.isVisible = false
+                        }
+                        is Lce.Content -> {
+                            progressCircular.isVisible = false
+                            findNavController().navigate(RegisterPhotoFragmentDirections.actionRegisterPhotoToRegisterWait())
+                        }
+                        is Lce.Error -> {
+                            progressCircular.isVisible = false
+                            layoutRegisterPhotos.isVisible = true
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

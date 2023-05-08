@@ -10,5 +10,5 @@ data class User(
     val birthdate: Date,
     val profileDescription: String,
     val passportNumber: String,
-    val driverLicenseNumber: String,
+    val driverLicenseNumber: String
 )

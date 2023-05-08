@@ -8,5 +8,7 @@ data class AdvertisementResponseDTO(
     val advertisement: AdvertisementDTO,
     val car: CarDTO,
     val carFeatureList: CarFeatureListDTO,
-    val photoPaths: List<String>
+    val photoPaths: List<String>,
+    val avgMark: Double,
+    val rides: Long
 )

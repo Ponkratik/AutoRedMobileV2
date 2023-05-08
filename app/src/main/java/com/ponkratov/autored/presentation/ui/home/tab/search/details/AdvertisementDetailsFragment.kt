@@ -17,15 +17,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.ponkratov.autored.R
 import com.ponkratov.autored.databinding.FragmentAdvertisementDetailsBinding
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.domain.model.response.AdvertisementResponse
 import com.ponkratov.autored.domain.model.toListOptions
 import com.ponkratov.autored.presentation.extensions.addHorisontalSpace
-import com.ponkratov.autored.presentation.ui.login.LoginFragmentDirections
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class AdvertisementDetailsFragment : Fragment() {
 
@@ -110,43 +110,34 @@ class AdvertisementDetailsFragment : Fragment() {
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    progressCircular.isVisible = true
-                    layoutAdvertisement.isVisible = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutAdvertisement.isVisible = true
-                    Snackbar.make(
-                        requireView(),
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutAdvertisement.isVisible = true
-                    AlertDialog
-                        .Builder(requireContext())
-                        .setTitle("Бронь")
-                        .setMessage(it)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .bookingFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                    when (it) {
+                        is Lce.Loading -> {
+                            progressCircular.isVisible = true
+                            layoutAdvertisement.isVisible = false
+                        }
+                        is Lce.Content -> {
+                            progressCircular.isVisible = false
+                            layoutAdvertisement.isVisible = true
+                            AlertDialog
+                                .Builder(requireContext())
+                                .setTitle("Бронь")
+                                .setMessage(it.toString())
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show()
+                        }
+                        is Lce.Error -> {
+                            progressCircular.isVisible = false
+                            layoutAdvertisement.isVisible = true
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

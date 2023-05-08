@@ -6,5 +6,5 @@ class GetRideResponsesByLessorIdUseCase(
     private val rideRepository: RideRepository
 ) {
 
-    suspend operator fun invoke(lessorId: Long) = rideRepository.getRideResponsesByLessorId(lessorId)
+    suspend operator fun invoke(lessorId: String) = rideRepository.getRideResponsesByLessorId(lessorId)
 }

@@ -8,5 +8,7 @@ data class AdvertisementResponse(
     val advertisement: Advertisement,
     val car: Car,
     val carFeatureList: CarFeatureList,
-    val photoPaths: List<String>
+    val photoPaths: List<String>,
+    val avgMark: Double,
+    val rides: Long
 )

@@ -4,7 +4,7 @@ import com.ponkratov.autored.data.model.AdvertisementDTO
 import com.ponkratov.autored.data.model.CarDTO
 import com.ponkratov.autored.data.model.CarFeatureListDTO
 import com.ponkratov.autored.data.model.response.AdvertisementResponseDTO
-import com.ponkratov.autored.data.model.response.MessageResponse
+import com.ponkratov.autored.data.model.response.MessageResponseDTO
 import okhttp3.MultipartBody
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -18,10 +18,10 @@ interface AdvertisementApi {
     suspend fun getAdvertisementsResponse(): List<AdvertisementResponseDTO>
 
     @GET("advertisement/get/full/all/{id}")
-    suspend fun getAdvertisementsResponseByUserId(@Path("id") userId: Long): List<AdvertisementResponseDTO>
+    suspend fun getAdvertisementsResponseByUserId(@Path("id") userId: String): List<AdvertisementResponseDTO>
 
     @GET("advertisement/get/full/{id}")
-    suspend fun getAdvertisementResponse(@Path("id") advertisementId: Long): AdvertisementResponseDTO
+    suspend fun getAdvertisementResponse(@Path("id") advertisementId: String): AdvertisementResponseDTO
 
     @Multipart
     @POST("advertisement/add")
@@ -30,7 +30,5 @@ interface AdvertisementApi {
         @Part("car") car: CarDTO,
         @Part("car-features") carFeatures: CarFeatureListDTO,
         @Part files: List<MultipartBody.Part>
-    ): MessageResponse
-
-
+    ): MessageResponseDTO
 }

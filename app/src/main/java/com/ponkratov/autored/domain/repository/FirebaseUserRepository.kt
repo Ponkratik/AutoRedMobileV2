@@ -5,8 +5,6 @@ import com.ponkratov.autored.domain.model.FirebaseUser
 
 interface FirebaseUserRepository {
 
-    suspend fun register(firebaseUser: FirebaseUser): Result<AuthResult>
-
     suspend fun authenticate(firebaseUser: FirebaseUser): Result<AuthResult>
 
     suspend fun resetPassword(email: String): Result<Unit>

@@ -13,11 +13,12 @@ fun AdvertisementDTO.toDomain(): Advertisement {
         latitude,
         longitude,
         publicationDate,
-        verified,
         carId,
         pricePerDay,
         pricePerWeek,
-        pricePerMonth
+        pricePerMonth,
+        statusId,
+        message
     )
 }
 
@@ -29,22 +30,28 @@ fun Advertisement.toData(): AdvertisementDTO {
         latitude,
         longitude,
         publicationDate,
-        verified,
         carId,
         pricePerDay,
         pricePerWeek,
-        pricePerMonth
+        pricePerMonth,
+        statusId,
+        message
     )
 }
 
 fun AdvertisementResponseDTO.toDomain(): AdvertisementResponse {
     return AdvertisementResponse(
-        advertisement.toDomain(), car.toDomain(), carFeatureList.toDomain(), photoPaths
+        advertisement.toDomain(),
+        car.toDomain(),
+        carFeatureList.toDomain(),
+        photoPaths,
+        avgMark,
+        rides
     )
 }
 
 fun AdvertisementResponse.toData(): AdvertisementResponseDTO {
     return AdvertisementResponseDTO(
-        advertisement.toData(), car.toData(), carFeatureList.toData(), photoPaths
+        advertisement.toData(), car.toData(), carFeatureList.toData(), photoPaths, avgMark, rides
     )
 }

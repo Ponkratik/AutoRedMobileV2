@@ -2,9 +2,9 @@ package com.ponkratov.autored.domain.usecase
 
 import com.ponkratov.autored.domain.repository.RideRepository
 
-class StartRideUseCase(
+class SignActBeforeByLessorUseCase(
     private val rideRepository: RideRepository
 ) {
 
-    suspend operator fun invoke(rideId: Long) = rideRepository.startRide(rideId)
+    suspend operator fun invoke(rideId: String) = rideRepository.signActBeforeByLessor(rideId)
 }

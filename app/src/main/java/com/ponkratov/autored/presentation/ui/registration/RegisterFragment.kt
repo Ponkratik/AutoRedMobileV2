@@ -29,18 +29,6 @@ class RegisterFragment : Fragment() {
 
         with(binding) {
             buttonRegister.setOnClickListener {
-                /*layoutRegister.children.forEach { container ->
-                    if (container is TextInputLayout) {
-                        container.children.forEach {
-                            if (it is TextInputEditText) {
-                                if (it.text.toString().isEmpty()) {
-                                    container.error = "Поле пусто"
-                                    return@setOnClickListener
-                                }
-                            }
-                        }
-                    }
-                }*/
 
                 if (editTextFio.text.toString().isEmpty()) {
                     containerFio.error = "Поле пусто"

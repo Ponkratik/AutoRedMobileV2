@@ -142,7 +142,7 @@ class RideDetailsLessorFragment : Fragment() {
 
     private fun initButtons(rideResponse: RideResponse) {
         with(binding) {
-            if (rideResponse.ride.dateStart == Date(0)) {
+            /*if (rideResponse.ride.dateStart == Date(0)) {
                 textReview.isVisible = false
                 descriptionTable.isVisible = true
                 buttonSignAct.isVisible = true
@@ -195,7 +195,7 @@ class RideDetailsLessorFragment : Fragment() {
                 buttonEndRide.isVisible = false
                 textStatus.text = "Поездка завершена"
                 return
-            }
+            }*/
         }
     }
 

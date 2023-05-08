@@ -1,5 +1,5 @@
 package com.ponkratov.autored.data.model.response
 
-class MessageResponse(
+class MessageResponseDTO(
     val message: String
 )

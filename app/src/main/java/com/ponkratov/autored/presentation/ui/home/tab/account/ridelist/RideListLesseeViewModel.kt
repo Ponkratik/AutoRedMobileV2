@@ -3,9 +3,7 @@ package com.ponkratov.autored.presentation.ui.home.tab.account.ridelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ponkratov.autored.domain.model.response.RideResponse
-import com.ponkratov.autored.domain.usecase.GetJwtResponseUseCase
 import com.ponkratov.autored.domain.usecase.GetRideResponsesByAdvertisementIdUseCase
-import com.ponkratov.autored.domain.usecase.GetRideResponsesByLessorIdUseCase
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,7 +14,7 @@ class RideListLesseeViewModel(
     private val getRideResponsesByAdvertisementIdUseCase: GetRideResponsesByAdvertisementIdUseCase
 ) : ViewModel() {
 
-    private var initFlow = MutableSharedFlow<Long>(
+    private var initFlow = MutableSharedFlow<String>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
@@ -52,7 +50,7 @@ class RideListLesseeViewModel(
             replay = 1
         )
 
-    fun onRefreshSwiped(advertisementId: Long) {
+    fun onRefreshSwiped(advertisementId: String) {
         initFlow.tryEmit(advertisementId)
     }
 }

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.ponkratov.autored.databinding.FragmentSearchBinding
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.presentation.extensions.addVerticalSpace
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -59,34 +60,25 @@ class SearchFragment : Fragment() {
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    layoutSwiperefresh.isRefreshing = true
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    Snackbar.make(
-                        requireView(),
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    adapter.submitList(it.filter { ad -> ad.advertisement.verified })
-                    layoutSwiperefresh.isRefreshing = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .getDataFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                    when (it) {
+                        is Lce.Loading -> {
+                            layoutSwiperefresh.isRefreshing = true
+                        }
+                        is Lce.Content -> {
+                            layoutSwiperefresh.isRefreshing = false
+                            adapter.submitList(it.data)
+                        }
+                        is Lce.Error -> {
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

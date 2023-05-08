@@ -2,10 +2,7 @@ package com.ponkratov.autored.data.repository
 
 import com.ponkratov.autored.data.api.AuthApi
 import com.ponkratov.autored.data.mapper.toData
-import com.ponkratov.autored.data.mapper.toDomain
-import com.ponkratov.autored.domain.model.request.LoginRequest
 import com.ponkratov.autored.domain.model.request.RegisterRequest
-import com.ponkratov.autored.domain.model.response.JwtResponse
 import com.ponkratov.autored.domain.repository.AuthRepository
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -15,11 +12,6 @@ import java.io.File
 class AuthRepositoryImpl(
     private val authApi: AuthApi
 ) : AuthRepository {
-    override suspend fun login(loginRequest: LoginRequest): Result<JwtResponse> = runCatching {
-        authApi.login(
-            loginRequest.toData()
-        ).toDomain()
-    }
 
     override suspend fun register(
         registerRequest: RegisterRequest,

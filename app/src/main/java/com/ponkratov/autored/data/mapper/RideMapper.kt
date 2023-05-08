@@ -8,12 +8,16 @@ fun RideDTO.toDomain(): Ride {
         id,
         advertisementId,
         lessorId,
+        dateBook,
         dateStart,
         dateEnd,
-        dateSignedLessor,
-        dateSignedLessee,
+        dateSignedBeforeLessor,
+        dateSignedBeforeLessee,
+        dateSignedAfterLessor,
+        dateSignedAfterLessee,
         chatLink,
         paymentLink,
+        paymentDate,
         totalCost
     )
 }
@@ -23,12 +27,16 @@ fun Ride.toData(): RideDTO {
         id,
         advertisementId,
         lessorId,
+        dateBook,
         dateStart,
         dateEnd,
-        dateSignedLessor,
-        dateSignedLessee,
+        dateSignedBeforeLessor,
+        dateSignedBeforeLessee,
+        dateSignedAfterLessor,
+        dateSignedAfterLessee,
         chatLink,
         paymentLink,
+        paymentDate,
         totalCost
     )
 }

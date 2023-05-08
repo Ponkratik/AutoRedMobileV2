@@ -1,8 +1,5 @@
 package com.ponkratov.autored.presentation.ui.home.tab.account.addadvertisement
 
-import android.R.attr.data
-import android.net.Uri
-import androidx.core.net.toFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ponkratov.autored.domain.model.Advertisement
@@ -16,7 +13,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import java.io.File
-import java.util.*
+import java.util.Date
 
 
 class AdvertisementAddViewModel(
@@ -105,7 +102,7 @@ class AdvertisementAddViewModel(
         filesList: List<File>
     ) {
         carFeatureList = CarFeatureList(
-            0,
+            "",
             isConditioner,
             isAllWheelDrive,
             isLeatherSeats,

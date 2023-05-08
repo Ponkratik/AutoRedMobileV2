@@ -13,15 +13,6 @@ class FirebaseUserRepositoryImpl(
     private val sharedPrefsRepositoryImpl: SharedPrefsRepositoryImpl
 ) : FirebaseUserRepository {
 
-    override suspend fun register(firebaseUser: FirebaseUser): Result<AuthResult> = runCatching {
-        val firebaseUserDTO = firebaseUser.toData()
-        Firebase.auth.createUserWithEmailAndPassword(
-            firebaseUserDTO.email,
-            firebaseUserDTO.password
-        )
-            .await()
-    }
-
     override suspend fun authenticate(firebaseUser: FirebaseUser): Result<AuthResult> =
         runCatching {
             val firebaseUserDTO = firebaseUser.toData()

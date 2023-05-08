@@ -6,5 +6,5 @@ class GetAdvertisementResponseUseCase(
     private val advertisementRepository: AdvertisementRepository
 ) {
 
-    suspend operator fun invoke(id: Long) = advertisementRepository.getAdvertisementResponse(id)
+    suspend operator fun invoke(id: String) = advertisementRepository.getAdvertisementResponse(id)
 }

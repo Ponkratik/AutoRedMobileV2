@@ -52,7 +52,7 @@ class AddReviewLesseeViewModel(
             replay = 1
         )
 
-    fun onSendButtonClicked(markUser: Int, commentUser: String, userTo: Long) {
+    fun onSendButtonClicked(markUser: Int, commentUser: String, userTo: String) {
         initFlow.tryEmit(
             ReviewUser(
                 mark = markUser,

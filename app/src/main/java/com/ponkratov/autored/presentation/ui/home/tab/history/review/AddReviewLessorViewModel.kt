@@ -66,7 +66,7 @@ class AddReviewLessorViewModel(
     private var reviewUser: ReviewUser? = null
     private var reviewCar: ReviewCar? = null
 
-    fun onSendButtonClicked(markCar: Int, commentCar: String, carTo: Long, markUser: Int, commentUser: String, userTo: Long) {
+    fun onSendButtonClicked(markCar: Int, commentCar: String, carTo: String, markUser: Int, commentUser: String, userTo: String) {
         reviewUser = ReviewUser(
             mark = markUser,
             comment = commentUser,

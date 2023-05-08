@@ -4,39 +4,60 @@ import com.ponkratov.autored.data.api.RideApi
 import com.ponkratov.autored.data.mapper.toDomain
 import com.ponkratov.autored.domain.model.response.RideResponse
 import com.ponkratov.autored.domain.repository.RideRepository
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.util.Date
 
 class RideRepositoryImpl(
     private val rideApi: RideApi
 ) : RideRepository {
-    override suspend fun bookRide(advertisementId: Long, lessorId: Long): Result<String> =
+    override suspend fun bookRide(advertisementId: String, lessorId: String, dateStart: Date, dateEnd: Date): Result<String> =
         runCatching {
-            rideApi.bookRide(advertisementId, lessorId).message
+            rideApi.bookRide(advertisementId, lessorId, dateStart, dateEnd).message
         }
 
-    override suspend fun startRide(rideId: Long): Result<String> = runCatching {
-        rideApi.startRide(rideId).message
+    override suspend fun signActBeforeByLessor(rideId: String): Result<String> = runCatching {
+        rideApi.signActBeforeByLessor(rideId).message
     }
 
-    override suspend fun endRide(rideId: Long): Result<String> = runCatching {
-        rideApi.endRide(rideId).message
+    override suspend fun signActBeforeByLessee(rideId: String, files: List<File>): Result<String> = runCatching {
+        val fileBodys = files.map {
+            MultipartBody.Part.createFormData(
+                "files",
+                it.name,
+                it.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+        rideApi.signActBeforeByLessee(rideId, fileBodys).message
     }
 
-    override suspend fun signActByLessor(rideId: Long): Result<String> = runCatching {
-        rideApi.signActByLessor(rideId).message
+    override suspend fun signActAfterByLessor(rideId: String, files: List<File>): Result<String> = runCatching {
+        val fileBodys = files.map {
+            MultipartBody.Part.createFormData(
+                "files",
+                it.name,
+                it.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+        rideApi.signActAfterByLessor(rideId, fileBodys).message
     }
 
-    override suspend fun signActByLessee(rideId: Long): Result<String> = runCatching {
-        rideApi.signActByLessee(rideId).message
+    override suspend fun signActAfterByLessee(rideId: String): Result<String> = runCatching {
+        rideApi.signActAfterByLessee(rideId).message
     }
 
-    override suspend fun getRideResponsesByAdvertisementId(advertisementId: Long): Result<List<RideResponse>> =
+    override suspend fun getRideResponsesByAdvertisementId(advertisementId: String): Result<List<RideResponse>> =
         runCatching {
             rideApi.getRideResponsesByAdvertisementId(advertisementId).map {
                 it.toDomain()
             }
         }
 
-    override suspend fun getRideResponsesByLessorId(lessorId: Long): Result<List<RideResponse>> =
+    override suspend fun getRideResponsesByLessorId(lessorId: String): Result<List<RideResponse>> =
         runCatching {
             rideApi.getRideResponsesByLessorId(lessorId).map {
                 it.toDomain()

@@ -1,9 +1,9 @@
 package com.ponkratov.autored.domain.model
 
 data class ReviewCar(
-    val id: Long = 0,
+    val id: String = "",
     val mark: Int,
     val comment: String,
-    val userFrom: Long,
-    val carTo: Long
+    val userFrom: String,
+    val carTo: String
 )

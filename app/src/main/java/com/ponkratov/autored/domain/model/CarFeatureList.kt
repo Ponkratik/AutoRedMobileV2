@@ -1,7 +1,7 @@
 package com.ponkratov.autored.domain.model
 
 data class CarFeatureList(
-    val carId: Long = 0,
+    val carId: String = "",
     val isConditioner: Boolean,
     val isAllWheelDrive: Boolean,
     val isLeatherSeats: Boolean,

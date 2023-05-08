@@ -10,9 +10,9 @@ interface AdvertisementRepository {
 
     suspend fun getAdvertisementsResponse(): Result<List<AdvertisementResponse>>
 
-    suspend fun getAdvertisementsResponseByUserId(userId: Long): Result<List<AdvertisementResponse>>
+    suspend fun getAdvertisementsResponseByUserId(userId: String): Result<List<AdvertisementResponse>>
 
-    suspend fun getAdvertisementResponse(id: Long): Result<AdvertisementResponse>
+    suspend fun getAdvertisementResponse(id: String): Result<AdvertisementResponse>
 
     suspend fun addAdvertisement(
         advertisement: Advertisement,

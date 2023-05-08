@@ -44,9 +44,9 @@
         android:name="com.ponkratov.autored.presentation.ui.home.tab.history.review.AddReviewLessorFragment"
         tools:layout="@layout/fragment_add_review_lessor" >
         <argument android:name="lesseeId"
-            app:argType="long"/>
+            app:argType="string"/>
         <argument android:name="carId"
-            app:argType="long"/>
+            app:argType="string"/>
     </fragment>
 
     <fragment

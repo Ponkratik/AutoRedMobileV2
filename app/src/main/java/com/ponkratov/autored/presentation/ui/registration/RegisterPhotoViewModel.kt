@@ -2,43 +2,36 @@ package com.ponkratov.autored.presentation.ui.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.domain.model.request.RegisterRequest
 import com.ponkratov.autored.domain.usecase.RegisterUseCase
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 import java.io.File
-import java.util.*
+import java.util.Date
 
 class RegisterPhotoViewModel(
     private val registerUseCase: RegisterUseCase
 ) : ViewModel() {
-    private var authFlow = MutableSharedFlow<Unit>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    val loadingFlow = MutableSharedFlow<Unit>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    val errorFlow = MutableSharedFlow<Throwable>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    val dataFlow = MutableSharedFlow<String>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
 
     private var registerRequest: RegisterRequest? = null
     private var avatarPhoto: File? = null
     private var passportPhoto: File? = null
     private var driverLicensePhoto: File? = null
 
-    val registerFlow = authFlow
+    private val initFlow = MutableSharedFlow<Unit>(
+        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val lceFlow = MutableSharedFlow<Lce<String>>(
+        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    private val networkFlow = initFlow
         .onEach {
-            loadingFlow.tryEmit(Unit)
+            lceFlow.tryEmit(Lce.Loading())
         }
         .onEach {
             registerUseCase(
@@ -46,20 +39,15 @@ class RegisterPhotoViewModel(
                 requireNotNull(avatarPhoto),
                 requireNotNull(passportPhoto),
                 requireNotNull(driverLicensePhoto)
+            ).fold(
+                onSuccess = {
+                    lceFlow.tryEmit(Lce.Content(it))
+                },
+                onFailure = {
+                    lceFlow.tryEmit(Lce.Error(it.message))
+                }
             )
-                .fold(
-                    onSuccess = {
-                        dataFlow.tryEmit(it)
-                    },
-                    onFailure = {
-                        errorFlow.tryEmit(it)
-                    }
-                )
-        }.shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            replay = 1
-        )
+        }.launchIn(viewModelScope)
 
     fun onRegisterButtonClicked(
         fio: String,
@@ -88,6 +76,6 @@ class RegisterPhotoViewModel(
         this.passportPhoto = passportPhoto
         this.driverLicensePhoto = driverLicensePhoto
 
-        authFlow.tryEmit(Unit)
+        initFlow.tryEmit(Unit)
     }
 }
