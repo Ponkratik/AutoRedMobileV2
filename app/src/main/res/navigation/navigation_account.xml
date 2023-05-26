@@ -24,8 +24,8 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
-            android:id="@+id/action_account_to_ride_list_lessee"
-            app:destination="@id/fragment_ride_list_lessee"
+            android:id="@+id/action_account_to_ride_list_lessor"
+            app:destination="@id/fragment_ride_list_lessor"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -46,14 +46,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_ride_list_lessee"
-        android:name="com.ponkratov.autored.presentation.ui.home.tab.account.ridelist.RideListLesseeFragment"
-        tools:layout="@layout/fragment_ride_list_lessee">
+        android:id="@+id/fragment_ride_list_lessor"
+        android:name="com.ponkratov.autored.presentation.ui.home.tab.account.ridelist.RideListLessorFragment"
+        tools:layout="@layout/fragment_ride_list_lessor">
         <argument android:name="advertisementResponse"
             app:argType="string"/>
         <action
-            android:id="@+id/action_ride_list_to_ride_details_lessee"
-            app:destination="@id/fragment_ride_details_lessee"
+            android:id="@+id/action_ride_list_to_ride_details_lessor"
+            app:destination="@id/fragment_ride_details_lessor"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -61,14 +61,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_ride_details_lessee"
-        android:name="com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.RideDetailsLesseeFragment"
-        tools:layout="@layout/fragment_ride_details_lessee">
+        android:id="@+id/fragment_ride_details_lessor"
+        android:name="com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.RideDetailsLessorFragment"
+        tools:layout="@layout/fragment_ride_details_lessor">
         <argument android:name="rideResponse"
             app:argType="string"/>
         <action
-            android:id="@+id/action_ride_details_lessee_to_add_review"
-            app:destination="@id/fragment_add_review_lessee"
+            android:id="@+id/action_ride_details_lessor_to_add_review"
+            app:destination="@id/fragment_add_review_lessor"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -76,10 +76,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_add_review_lessee"
-        android:name="com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review.AddReviewLesseeFragment"
-        tools:layout="@layout/fragment_add_review_lessee" >
-        <argument android:name="lessorId"
+        android:id="@+id/fragment_add_review_lessor"
+        android:name="com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review.AddReviewLessorFragment"
+        tools:layout="@layout/fragment_add_review_lessor" >
+        <argument android:name="lesseeId"
             app:argType="string"/>
     </fragment>
 

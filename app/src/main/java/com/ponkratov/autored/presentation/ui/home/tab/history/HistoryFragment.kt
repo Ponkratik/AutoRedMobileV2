@@ -10,11 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.ponkratov.autored.databinding.FragmentHistoryBinding
-import com.ponkratov.autored.databinding.FragmentLoginBinding
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.presentation.extensions.addVerticalSpace
-import com.ponkratov.autored.presentation.ui.home.tab.search.list.AdvertisementAdapter
-import com.ponkratov.autored.presentation.ui.home.tab.search.list.SearchFragmentDirections
-import com.ponkratov.autored.presentation.ui.home.tab.search.list.SearchViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -60,34 +57,25 @@ class HistoryFragment : Fragment() {
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    layoutSwiperefresh.isRefreshing = true
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    Snackbar.make(
-                        requireView(),
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    adapter.submitList(it)
-                    layoutSwiperefresh.isRefreshing = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .getDataFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                    when (it) {
+                        is Lce.Loading -> {
+                            layoutSwiperefresh.isRefreshing = true
+                        }
+                        is Lce.Content -> {
+                            adapter.submitList(it.data)
+                            layoutSwiperefresh.isRefreshing = false
+                        }
+                        is Lce.Error -> {
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

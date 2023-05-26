@@ -8,9 +8,9 @@ class ImageViewHolder(
     private val binding: ItemImageBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(filename: String) {
+    fun bind(filePath: String) {
         with(binding) {
-            carPhoto.load("http://10.0.2.2:8080/api/attachment/get/file/${filename}")
+            carPhoto.load(filePath)
         }
     }
 }

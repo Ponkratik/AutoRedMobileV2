@@ -3,6 +3,7 @@ package com.ponkratov.autored.presentation.ui.home.tab.search.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ponkratov.autored.domain.model.Lce
+import com.ponkratov.autored.domain.model.request.BookRequest
 import com.ponkratov.autored.domain.usecase.BookRideUseCase
 import com.ponkratov.autored.domain.usecase.GetJwtResponseUseCase
 import kotlinx.coroutines.channels.BufferOverflow
@@ -16,7 +17,7 @@ class AdvertisementDetailsViewModel(
     private val getJwtResponseUseCase: GetJwtResponseUseCase
 ) : ViewModel() {
 
-    private val initFlow = MutableSharedFlow<String>(
+    private val initFlow = MutableSharedFlow<BookRequest>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
@@ -28,8 +29,8 @@ class AdvertisementDetailsViewModel(
         .onEach {
             lceFlow.tryEmit(Lce.Loading())
         }
-        .onEach { advId ->
-            bookRideUseCase(advId, getJwtResponseUseCase().id, Date(), Date()).fold(
+        .onEach { request ->
+            bookRideUseCase(request).fold(
                 onSuccess = {
                     lceFlow.tryEmit(Lce.Content(it))
                 },
@@ -40,7 +41,7 @@ class AdvertisementDetailsViewModel(
         }.launchIn(viewModelScope)
 
 
-    fun onBookButtonClicked(advertisementId: String) {
-        initFlow.tryEmit(advertisementId)
+    fun onBookButtonClicked(advertisementId: String, dateStart: Date, dateEnd: Date) {
+        initFlow.tryEmit(BookRequest(advertisementId,  getJwtResponseUseCase().id, dateStart, dateEnd))
     }
 }

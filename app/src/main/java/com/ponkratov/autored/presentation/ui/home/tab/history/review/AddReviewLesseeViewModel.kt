@@ -2,6 +2,7 @@ package com.ponkratov.autored.presentation.ui.home.tab.history.review
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.domain.model.ReviewCar
 import com.ponkratov.autored.domain.model.ReviewUser
 import com.ponkratov.autored.domain.usecase.AddReviewCarUseCase
@@ -9,35 +10,26 @@ import com.ponkratov.autored.domain.usecase.AddReviewUserUseCase
 import com.ponkratov.autored.domain.usecase.GetJwtResponseUseCase
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 
-class AddReviewLessorViewModel(
+class AddReviewLesseeViewModel(
     private val addReviewUserUseCase: AddReviewUserUseCase,
     private val addReviewCarUseCase: AddReviewCarUseCase,
     private val getJwtResponseUseCase: GetJwtResponseUseCase
 ) : ViewModel() {
 
-    private var initFlow = MutableSharedFlow<Unit>(
+    private val initFlow = MutableSharedFlow<Unit>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
-    val loadingFlow = MutableSharedFlow<Unit>(
+    val lceFlow = MutableSharedFlow<Lce<String>>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
-    val errorFlow = MutableSharedFlow<Throwable>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    val dataFlow = MutableSharedFlow<String>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    val getResponseFlow = initFlow
+    private val networkFlow = initFlow
         .onEach {
-            loadingFlow.tryEmit(Unit)
+            lceFlow.tryEmit(Lce.Loading())
         }
         .onEach {
             addReviewUserUseCase(requireNotNull(reviewUser))
@@ -46,27 +38,30 @@ class AddReviewLessorViewModel(
                         addReviewCarUseCase(requireNotNull(reviewCar))
                             .fold(
                                 onSuccess = {
-                                    dataFlow.tryEmit(it)
+                                    lceFlow.tryEmit(Lce.Content(it))
                                 },
                                 onFailure = {
-                                    errorFlow.tryEmit(it)
+                                    lceFlow.tryEmit(Lce.Error(it.message))
                                 }
                             )
                     },
                     onFailure = {
-                        errorFlow.tryEmit(it)
+                        lceFlow.tryEmit(Lce.Error(it.message))
                     }
                 )
-        }.shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            replay = 1
-        )
+        }.launchIn(viewModelScope)
 
     private var reviewUser: ReviewUser? = null
     private var reviewCar: ReviewCar? = null
 
-    fun onSendButtonClicked(markCar: Int, commentCar: String, carTo: String, markUser: Int, commentUser: String, userTo: String) {
+    fun onSendButtonClicked(
+        markCar: Int,
+        commentCar: String,
+        carTo: String,
+        markUser: Int,
+        commentUser: String,
+        userTo: String
+    ) {
         reviewUser = ReviewUser(
             mark = markUser,
             comment = commentUser,

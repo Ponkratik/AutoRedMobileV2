@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import com.ponkratov.autored.databinding.FragmentRideDetailsLesseeBinding
 import com.ponkratov.autored.databinding.FragmentRideDetailsLessorBinding
 
-class RideDetailsLesseeFragment : Fragment() {
+class RideDetailsLessorFragment : Fragment() {
 
-    private var _binding: FragmentRideDetailsLesseeBinding? = null
+    private var _binding: FragmentRideDetailsLessorBinding? = null
     private val binding get() = requireNotNull(_binding)
 
     override fun onCreateView(
@@ -18,7 +18,7 @@ class RideDetailsLesseeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return FragmentRideDetailsLesseeBinding.inflate(inflater, container, false)
+        return FragmentRideDetailsLessorBinding.inflate(inflater, container, false)
             .also { _binding = it }
             .root
     }

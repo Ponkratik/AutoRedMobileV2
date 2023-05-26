@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.ponkratov.autored.databinding.FragmentAdvertisementAddBinding
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.presentation.extensions.addHorisontalSpace
 import com.ponkratov.autored.presentation.extensions.hideKeyboard
 import kotlinx.coroutines.flow.launchIn
@@ -186,44 +187,35 @@ class AdvertisementAddFragment : Fragment() {
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    progressCircular.isVisible = true
-                    layoutAdvertisement.isVisible = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutAdvertisement.isVisible = true
-                    Snackbar.make(
-                        requireView(),
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutAdvertisement.isVisible = true
-                    clearInputs()
-                    AlertDialog
-                        .Builder(requireContext())
-                        .setTitle("Публикация объявления")
-                        .setMessage(it)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .getResponseFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                    when (it) {
+                        is Lce.Loading -> {
+                            progressCircular.isVisible = true
+                            layoutAdvertisement.isVisible = false
+                        }
+                        is Lce.Content -> {
+                            progressCircular.isVisible = false
+                            layoutAdvertisement.isVisible = true
+                            clearInputs()
+                            AlertDialog
+                                .Builder(requireContext())
+                                .setTitle("Публикация объявления")
+                                .setMessage(it.data)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show()
+                        }
+                        is Lce.Error -> {
+                            progressCircular.isVisible = false
+                            layoutAdvertisement.isVisible = true
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

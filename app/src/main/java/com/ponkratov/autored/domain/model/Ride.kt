@@ -16,5 +16,6 @@ data class Ride(
     val chatLink: String,
     val paymentLink: String,
     val paymentDate: Date,
-    val totalCost: Double
+    val totalCost: Double,
+    val statusId: Long = 0
 )

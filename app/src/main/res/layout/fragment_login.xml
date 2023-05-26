@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@color/black"
+            android:textColor="@color/black_800"
             android:text="@string/register"/>
     </LinearLayout>
 

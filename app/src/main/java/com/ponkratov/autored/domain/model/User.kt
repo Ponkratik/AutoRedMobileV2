@@ -3,7 +3,7 @@ package com.ponkratov.autored.domain.model
 import java.util.*
 
 data class User(
-    val id: Long,
+    val id: String,
     val fio: String,
     val email: String,
     val phone: String,

@@ -203,7 +203,7 @@ class RegisterPhotoFragment : Fragment() {
 
         return FileProvider.getUriForFile(
             requireContext(),
-            "${BuildConfig.LIBRARY_PACKAGE_NAME}.provider",
+            "${requireContext().packageName}.provider",
             tmpFile
         )
     }

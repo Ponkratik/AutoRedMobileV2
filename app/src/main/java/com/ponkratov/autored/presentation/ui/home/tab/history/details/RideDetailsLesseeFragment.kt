@@ -11,22 +11,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
 import com.ponkratov.autored.R
-import com.ponkratov.autored.databinding.FragmentRideDetailsLessorBinding
+import com.ponkratov.autored.databinding.FragmentRideDetailsLesseeBinding
+import com.ponkratov.autored.domain.model.RideStatusEnum
 import com.ponkratov.autored.domain.model.response.RideResponse
 import com.ponkratov.autored.presentation.extensions.addHorisontalSpace
 import com.ponkratov.autored.presentation.ui.home.tab.search.details.ImageAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
-class RideDetailsLessorFragment : Fragment() {
+class RideDetailsLesseeFragment : Fragment() {
 
-    private var _binding: FragmentRideDetailsLessorBinding? = null
+    private var _binding: FragmentRideDetailsLesseeBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val viewModel by viewModel<RideDetailsLessorViewModel>()
+    private val viewModel by viewModel<RideDetailsLesseeViewModel>()
 
-    private val args by navArgs<RideDetailsLessorFragmentArgs>()
+    private val args by navArgs<RideDetailsLesseeFragmentArgs>()
 
     private val imageAdapter by lazy {
         ImageAdapter(
@@ -39,7 +40,7 @@ class RideDetailsLessorFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return FragmentRideDetailsLessorBinding.inflate(inflater, container, false)
+        return FragmentRideDetailsLesseeBinding.inflate(inflater, container, false)
             .also { _binding = it }
             .root
     }
@@ -71,6 +72,10 @@ class RideDetailsLessorFragment : Fragment() {
                 ).format(rideResponse.advertisementResponse.car.manufacturedYear)
             )
 
+            textRate.text = rideResponse.advertisementResponse.avgMark.toString()
+
+            textRidesQty.text = getString(R.string.rides_qty, rideResponse.advertisementResponse.rides)
+
             textPricePerDay.text =
                 getString(
                     R.string.text_price,
@@ -92,7 +97,7 @@ class RideDetailsLessorFragment : Fragment() {
 
             textReview.setOnClickListener {
                 findNavController().navigate(
-                    RideDetailsLessorFragmentDirections.actionDetailsToReview(
+                    RideDetailsLesseeFragmentDirections.actionDetailsToReview(
                         rideResponse.advertisementResponse.advertisement.userId,
                         rideResponse.advertisementResponse.car.id
                     )
@@ -100,7 +105,7 @@ class RideDetailsLessorFragment : Fragment() {
             }
 
             textLinkPayment.setOnClickListener {
-                findNavController().navigate(RideDetailsLessorFragmentDirections.actionDetailsToPayment())
+                findNavController().navigate(RideDetailsLesseeFragmentDirections.actionDetailsToPayment())
             }
 
             buttonBack.setOnClickListener {
@@ -111,16 +116,6 @@ class RideDetailsLessorFragment : Fragment() {
                 AlertDialog
                     .Builder(requireContext())
                     .setTitle("Подписание акта")
-                    .setMessage("Нажимая на кнопку \"ОК\" вы подтверждаете ознакомление с условиями сервиса")
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
-            }
-
-            buttonStartRide.setOnClickListener {
-                AlertDialog
-                    .Builder(requireContext())
-                    .setTitle("Начало поездки")
                     .setMessage("Нажимая на кнопку \"ОК\" вы подтверждаете ознакомление с условиями сервиса")
                     .setPositiveButton(android.R.string.ok, null)
                     .setNegativeButton(android.R.string.cancel, null)
@@ -142,60 +137,43 @@ class RideDetailsLessorFragment : Fragment() {
 
     private fun initButtons(rideResponse: RideResponse) {
         with(binding) {
-            /*if (rideResponse.ride.dateStart == Date(0)) {
-                textReview.isVisible = false
-                descriptionTable.isVisible = true
-                buttonSignAct.isVisible = true
-                buttonStartRide.isVisible = false
-                buttonEndRide.isVisible = false
-                textStatus.text = "Автомобиль забронирован"
-                return
+            when(rideResponse.ride.statusId.toInt()) {
+                RideStatusEnum.STATUS_BOOKED.ordinal + 1 -> {
+                    textStatus.text = RideStatusEnum.STATUS_BOOKED.desc
+                    descriptionTable.isVisible = true
+                    buttonSignAct.isVisible = true
+                    buttonEndRide.isVisible = false
+                    textReview.isVisible = false
+                }
+                RideStatusEnum.STATUS_SIGNED_BEFORE_LESSEE.ordinal + 1 -> {
+                    textStatus.text = RideStatusEnum.STATUS_SIGNED_BEFORE_LESSEE.desc
+                    descriptionTable.isVisible = true
+                    buttonSignAct.isVisible = false
+                    buttonEndRide.isVisible = false
+                    textReview.isVisible = false
+                }
+                RideStatusEnum.STATUS_STARTED.ordinal + 1 -> {
+                    textStatus.text = RideStatusEnum.STATUS_STARTED.desc
+                    descriptionTable.isVisible = true
+                    buttonSignAct.isVisible = false
+                    buttonEndRide.isVisible = false
+                    textReview.isVisible = false
+                }
+                RideStatusEnum.STATUS_SIGNED_AFTER_LESSOR.ordinal + 1 -> {
+                    textStatus.text = RideStatusEnum.STATUS_SIGNED_AFTER_LESSOR.desc
+                    descriptionTable.isVisible = true
+                    buttonSignAct.isVisible = false
+                    buttonEndRide.isVisible = true
+                    textReview.isVisible = false
+                }
+                RideStatusEnum.STATUS_FINISHED.ordinal + 1 -> {
+                    textStatus.text = RideStatusEnum.STATUS_FINISHED.desc
+                    descriptionTable.isVisible = false
+                    buttonSignAct.isVisible = false
+                    buttonEndRide.isVisible = false
+                    textReview.isVisible = true
+                }
             }
-
-            if (rideResponse.ride.dateStart == Date(0)
-                && rideResponse.ride.dateSignedLessor != Date(0)
-                && rideResponse.ride.dateSignedLessee == Date(0)) {
-                textReview.isVisible = false
-                descriptionTable.isVisible = true
-                buttonSignAct.isVisible = false
-                buttonStartRide.isVisible = false
-                buttonEndRide.isVisible = false
-                textStatus.text = "Ожидание подписания акта арендодателем"
-                return
-            }
-
-            if (rideResponse.ride.dateStart == Date(0)
-                && rideResponse.ride.dateSignedLessor != Date(0)
-                && rideResponse.ride.dateSignedLessee != Date(0)) {
-                textReview.isVisible = false
-                descriptionTable.isVisible = true
-                buttonSignAct.isVisible = false
-                buttonStartRide.isVisible = true
-                buttonEndRide.isVisible = false
-                textStatus.text = "Акт подписан"
-                return
-            }
-
-            if (rideResponse.ride.dateStart != Date(0)
-                && rideResponse.ride.dateEnd == Date(0)) {
-                textReview.isVisible = false
-                descriptionTable.isVisible = true
-                buttonSignAct.isVisible = false
-                buttonStartRide.isVisible = false
-                buttonEndRide.isVisible = true
-                textStatus.text = "Поездка начата"
-                return
-            }
-
-            if (rideResponse.ride.dateEnd != Date(0)) {
-                textReview.isVisible = true
-                descriptionTable.isVisible = false
-                buttonSignAct.isVisible = false
-                buttonStartRide.isVisible = false
-                buttonEndRide.isVisible = false
-                textStatus.text = "Поездка завершена"
-                return
-            }*/
         }
     }
 

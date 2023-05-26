@@ -1,35 +1,37 @@
-package com.ponkratov.autored.presentation.ui.home.tab.account
+package com.ponkratov.autored.presentation.ui.home.tab.account.ridelist
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.ponkratov.autored.databinding.FragmentAccountBinding
+import com.ponkratov.autored.databinding.FragmentRideListLessorBinding
 import com.ponkratov.autored.domain.model.Lce
+import com.ponkratov.autored.domain.model.response.AdvertisementResponse
 import com.ponkratov.autored.presentation.extensions.addVerticalSpace
-import com.ponkratov.autored.presentation.ui.home.tab.search.list.AdvertisementAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AccountFragment : Fragment() {
-    private var _binding: FragmentAccountBinding? = null
+class RideListLessorFragment : Fragment() {
+    private var _binding: FragmentRideListLessorBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val viewModel by viewModel<AccountViewModel>()
+    private val viewModel by viewModel<RideListLessorViewModel>()
+
+    private val args by navArgs<RideListLessorFragmentArgs>()
 
     private val adapter by lazy {
-        AdvertisementAdapter(
+        RideLessorAdapter(
             context = requireContext(),
-            onAdvertisementClicked = {
+            onRideClicked = {
                 findNavController().navigate(
-                    AccountFragmentDirections.actionAccountToRideListLessor(Gson().toJson(it))
+                    RideListLessorFragmentDirections.actionRideListToRideDetailsLessor(Gson().toJson(it))
                 )
             }
         )
@@ -40,7 +42,7 @@ class AccountFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return FragmentAccountBinding.inflate(inflater, container, false)
+        return FragmentRideListLessorBinding.inflate(inflater, container, false)
             .also { _binding = it }
             .root
     }
@@ -49,14 +51,16 @@ class AccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            progressCircular.isVisible = false
+            val advertisementResponse = Gson().fromJson(args.advertisementResponse, AdvertisementResponse::class.java)
+            layoutSwiperefresh.isRefreshing = true
+            viewModel.onRefreshSwiped(advertisementResponse.advertisement.id)
 
-            buttonSettings.setOnClickListener {
-                findNavController().navigate(AccountFragmentDirections.actionAccountToSettings())
+            layoutSwiperefresh.setOnRefreshListener {
+                viewModel.onRefreshSwiped(advertisementResponse.advertisement.id)
             }
 
-            buttonAddAdvertisement.setOnClickListener {
-                findNavController().navigate(AccountFragmentDirections.actionAccountToAdvertisementAdd())
+            buttonBack.setOnClickListener {
+                findNavController().navigateUp()
             }
 
             advertisementRecyclerView.adapter = adapter
@@ -67,16 +71,13 @@ class AccountFragment : Fragment() {
                 .onEach {
                     when (it) {
                         is Lce.Loading -> {
-                            progressCircular.isVisible = true
+                            layoutSwiperefresh.isRefreshing = true
                         }
-
                         is Lce.Content -> {
                             adapter.submitList(it.data)
-                            progressCircular.isVisible = false
+                            layoutSwiperefresh.isRefreshing = false
                         }
-
                         is Lce.Error -> {
-                            progressCircular.isVisible = false
                             Snackbar.make(
                                 requireView(),
                                 it.message.toString(),
@@ -86,7 +87,6 @@ class AccountFragment : Fragment() {
                     }
                 }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
-
     }
 
     override fun onDestroyView() {

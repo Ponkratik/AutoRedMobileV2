@@ -1,18 +1,13 @@
 package com.ponkratov.autored.domain.repository
 
+import com.ponkratov.autored.domain.model.request.BookRequest
 import com.ponkratov.autored.domain.model.response.RideResponse
 import retrofit2.http.Path
 import java.io.File
-import java.util.Date
 
 interface RideRepository {
 
-    suspend fun bookRide(
-        advertisementId: String,
-        lessorId: String,
-        dateStart: Date,
-        dateEnd: Date
-    ): Result<String>
+    suspend fun bookRide(bookRequest: BookRequest): Result<String>
 
     suspend fun signActBeforeByLessor(rideId: String): Result<String>
 

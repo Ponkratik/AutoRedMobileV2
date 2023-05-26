@@ -32,7 +32,7 @@ class LoginViewModel(
                     lceFlow.tryEmit(Lce.Content(Unit))
                 },
                 onFailure = {
-                    lceFlow.tryEmit(Lce.Error(it.localizedMessage))
+                    lceFlow.tryEmit(Lce.Error(it.message))
                 }
             )
         }.launchIn(viewModelScope)

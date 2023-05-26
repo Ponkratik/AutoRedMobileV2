@@ -1,26 +1,24 @@
-package com.ponkratov.autored.presentation.ui.home.tab.account
+package com.ponkratov.autored.presentation.ui.home.tab.account.ridelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ponkratov.autored.domain.model.Lce
-import com.ponkratov.autored.domain.model.response.AdvertisementResponse
-import com.ponkratov.autored.domain.usecase.GetAdvertisementResponsesByUserIdUseCase
-import com.ponkratov.autored.domain.usecase.GetJwtResponseUseCase
+import com.ponkratov.autored.domain.model.response.RideResponse
+import com.ponkratov.autored.domain.usecase.GetRideResponsesByAdvertisementIdUseCase
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class AccountViewModel(
-    private val getAdvertisementResponsesByUserIdUseCase: GetAdvertisementResponsesByUserIdUseCase,
-    private val getJwtResponseUseCase: GetJwtResponseUseCase
+class RideListLessorViewModel(
+    private val getRideResponsesByAdvertisementIdUseCase: GetRideResponsesByAdvertisementIdUseCase
 ) : ViewModel() {
 
-    private val initFlow = MutableSharedFlow<Unit>(
+    private val initFlow = MutableSharedFlow<String>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
-    val lceFlow = MutableSharedFlow<Lce<List<AdvertisementResponse>>>(
+    val lceFlow = MutableSharedFlow<Lce<List<RideResponse>>>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
@@ -28,8 +26,8 @@ class AccountViewModel(
         .onEach {
             lceFlow.tryEmit(Lce.Loading())
         }
-        .onEach {
-            getAdvertisementResponsesByUserIdUseCase(getJwtResponseUseCase().id).fold(
+        .onEach { advertisementId ->
+            getRideResponsesByAdvertisementIdUseCase(advertisementId).fold(
                 onSuccess = {
                     lceFlow.tryEmit(Lce.Content(it))
                 },
@@ -39,7 +37,7 @@ class AccountViewModel(
             )
         }.launchIn(viewModelScope)
 
-    init {
-        initFlow.tryEmit(Unit)
+    fun onRefreshSwiped(advertisementId: String) {
+        initFlow.tryEmit(advertisementId)
     }
 }

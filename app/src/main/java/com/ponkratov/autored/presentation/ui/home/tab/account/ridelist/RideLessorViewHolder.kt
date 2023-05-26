@@ -1,16 +1,13 @@
 package com.ponkratov.autored.presentation.ui.home.tab.account.ridelist
 
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.ponkratov.autored.R
-import com.ponkratov.autored.databinding.ItemRideBinding
-import com.ponkratov.autored.databinding.ItemRideLesseeBinding
+import com.ponkratov.autored.databinding.ItemRideLessorBinding
 import com.ponkratov.autored.domain.model.response.RideResponse
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RideLesseeViewHolder(
-    private val binding: ItemRideLesseeBinding,
+class RideLessorViewHolder(
+    private val binding: ItemRideLessorBinding,
     private val onRideItemClicked: (RideResponse) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 

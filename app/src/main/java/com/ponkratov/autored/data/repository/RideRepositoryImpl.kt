@@ -2,6 +2,7 @@ package com.ponkratov.autored.data.repository
 
 import com.ponkratov.autored.data.api.RideApi
 import com.ponkratov.autored.data.mapper.toDomain
+import com.ponkratov.autored.domain.model.request.BookRequest
 import com.ponkratov.autored.domain.model.response.RideResponse
 import com.ponkratov.autored.domain.repository.RideRepository
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -13,9 +14,9 @@ import java.util.Date
 class RideRepositoryImpl(
     private val rideApi: RideApi
 ) : RideRepository {
-    override suspend fun bookRide(advertisementId: String, lessorId: String, dateStart: Date, dateEnd: Date): Result<String> =
+    override suspend fun bookRide(bookRequest: BookRequest): Result<String> =
         runCatching {
-            rideApi.bookRide(advertisementId, lessorId, dateStart, dateEnd).message
+            rideApi.bookRide(bookRequest).message
         }
 
     override suspend fun signActBeforeByLessor(rideId: String): Result<String> = runCatching {

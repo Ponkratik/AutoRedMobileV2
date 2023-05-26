@@ -73,7 +73,7 @@
             android:paddingEnd="8dp"
             android:layout_marginHorizontal="16dp"
             android:textSize="13sp"
-            tools:text="10 поездок" />
+            android:text="@string/rides_qty" />
 
         <TextView
             android:id="@+id/text_price_per_day"
@@ -88,7 +88,7 @@
             android:paddingEnd="8dp"
             android:layout_marginHorizontal="16dp"
             android:textSize="13sp"
-            tools:text="BYN 140/сутки" />
+            android:text="@string/day_price" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

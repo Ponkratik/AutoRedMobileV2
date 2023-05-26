@@ -116,7 +116,12 @@
                     android:id="@+id/edit_text_birthdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
+                    android:inputType="none"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:textIsSelectable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="@string/birthdate" />
             </com.google.android.material.textfield.TextInputLayout>
 

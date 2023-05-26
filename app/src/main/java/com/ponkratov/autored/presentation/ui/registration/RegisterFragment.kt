@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.ponkratov.autored.databinding.FragmentRegisterBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,8 +30,37 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            buttonRegister.setOnClickListener {
+            editTextBirthdate.setOnClickListener {
+                val today = MaterialDatePicker.todayInUtcMilliseconds()
+                val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                calendar.timeInMillis = today
+                calendar[Calendar.YEAR] = 1950
+                val startDate = calendar.timeInMillis
+                calendar.timeInMillis = today
+                calendar[Calendar.YEAR] = calendar[Calendar.YEAR] - 18
+                val endDate = calendar.timeInMillis
 
+                val constraints: CalendarConstraints = CalendarConstraints.Builder()
+                    .setOpenAt(endDate)
+                    .setStart(startDate)
+                    .setEnd(endDate)
+                    .build()
+                val datePicker = MaterialDatePicker
+                    .Builder
+                    .datePicker()
+                    .setCalendarConstraints(constraints)
+                    .setTitleText("Выберите дату рождения")
+                    .build()
+
+                datePicker.show(childFragmentManager, "date_picker")
+                datePicker.addOnPositiveButtonClickListener {
+                    calendar.timeInMillis = it
+                    val dateFormatter = SimpleDateFormat("dd.MM.yyyy", Locale.US)
+                    editTextBirthdate.setText(dateFormatter.format(calendar.time))
+                }
+            }
+
+            buttonRegister.setOnClickListener {
                 if (editTextFio.text.toString().isEmpty()) {
                     containerFio.error = "Поле пусто"
                     return@setOnClickListener
@@ -65,16 +96,22 @@ class RegisterFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                findNavController().navigate(RegisterFragmentDirections.actionRegisterToRegisterPhoto(
-                    birthdate = requireNotNull(SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(editTextBirthdate.text.toString())),
-                    fio = editTextFio.text.toString(),
-                    email = editTextEmail.text.toString(),
-                    rawPassword = editTextPassword.text.toString(),
-                    phone = editTextPhone.text.toString(),
-                    profileDescription = editTextProfileDescription.text.toString(),
-                    passportNumber = editTextPassportNumber.text.toString(),
-                    driverLicenseNumber = editTextDriverLicenseNumber.text.toString()
-                ))
+                findNavController().navigate(
+                    RegisterFragmentDirections.actionRegisterToRegisterPhoto(
+                        birthdate = requireNotNull(
+                            SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(
+                                editTextBirthdate.text.toString()
+                            )
+                        ),
+                        fio = editTextFio.text.toString(),
+                        email = editTextEmail.text.toString(),
+                        rawPassword = editTextPassword.text.toString(),
+                        phone = editTextPhone.text.toString(),
+                        profileDescription = editTextProfileDescription.text.toString(),
+                        passportNumber = editTextPassportNumber.text.toString(),
+                        driverLicenseNumber = editTextDriverLicenseNumber.text.toString()
+                    )
+                )
             }
         }
 

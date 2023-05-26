@@ -34,6 +34,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
+        <TextView
+            android:id="@+id/text_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/text_advertisement"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/button_back"
+            app:layout_constraintLeft_toRightOf="@id/button_back"
+            app:layout_constraintTop_toTopOf="@id/button_back" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/photo_recycler_view"
             android:layout_width="match_parent"
@@ -74,7 +86,7 @@
                 android:paddingBottom="8dp"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:text="5.0" />
+                tools:text="5.0" />
 
             <ImageView
                 android:id="@+id/image_rate"
@@ -95,7 +107,7 @@
                 android:paddingBottom="8dp"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:text="10 поездок" />
+                android:text="@string/rides_qty" />
         </TableRow>
 
         <TableLayout

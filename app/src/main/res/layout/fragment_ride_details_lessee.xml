@@ -46,23 +46,35 @@
             app:layout_constraintLeft_toRightOf="@id/button_back"
             app:layout_constraintTop_toTopOf="@id/button_back" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photo_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/button_back"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_image" />
+
         <TextView
-            android:id="@+id/lessor_fio"
+            android:id="@+id/car_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:padding="8dp"
-            android:text="Test test test"
+            android:text="@string/text_car_make_model_year"
             android:textColor="@color/white"
             android:textSize="24sp"
-            app:layout_constraintTop_toBottomOf="@id/text_header" />
+            app:layout_constraintTop_toBottomOf="@id/photo_recycler_view" />
 
         <TableRow
             android:id="@+id/row_rate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lessor_fio">
+            app:layout_constraintTop_toBottomOf="@id/car_name">
 
             <TextView
                 android:id="@+id/text_rate"
@@ -72,7 +84,7 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
-                android:text="5.0"
+                tools:text="5.0"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -84,6 +96,18 @@
                 android:paddingBottom="8dp"
                 android:src="@drawable/ic_baseline_star_rate_24"
                 app:tint="@color/bordo_800" />
+
+            <TextView
+                android:id="@+id/text_rides_qty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/rides_qty"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -130,12 +154,72 @@
             app:layout_constraintTop_toBottomOf="@+id/row_status" />
 
         <TableLayout
-            android:id="@+id/description_table"
+            android:id="@+id/price_table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
             android:stretchColumns="1"
             app:layout_constraintTop_toBottomOf="@id/text_review">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/day"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/text_price_per_day"
+                    android:gravity="end"
+                    android:text="@string/text_price"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/week"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/text_price_per_week"
+                    android:gravity="end"
+                    android:text="@string/text_price"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/month"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/text_price_per_month"
+                    android:gravity="end"
+                    android:text="@string/text_price"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:id="@+id/description_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:stretchColumns="1"
+            app:layout_constraintTop_toBottomOf="@id/price_table">
 
             <TableRow>
                 <TextView
@@ -185,23 +269,13 @@
             app:layout_constraintTop_toBottomOf="@id/description_table" />
 
         <Button
-            android:id="@+id/button_start_ride"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="75dp"
-            android:layout_marginVertical="32dp"
-            android:background="@drawable/round_rectangle"
-            android:text="@string/start_ride"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_table" />
-
-        <Button
             android:id="@+id/button_end_ride"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="75dp"
             android:layout_marginVertical="32dp"
+
+            android:textSize="14sp"
             android:background="@drawable/round_rectangle"
             android:text="@string/end_ride"
             android:textAllCaps="false"

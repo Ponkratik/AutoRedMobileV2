@@ -11,16 +11,16 @@
         tools:layout="@layout/fragment_history" >
         <action
             android:id="@+id/action_history_to_details"
-            app:destination="@id/fragment_ride_details_lessor"
+            app:destination="@id/fragment_ride_details_lessee"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/fragment_ride_details_lessor"
-        android:name="com.ponkratov.autored.presentation.ui.home.tab.history.details.RideDetailsLessorFragment"
-        tools:layout="@layout/fragment_ride_details_lessor" >
+        android:id="@+id/fragment_ride_details_lessee"
+        android:name="com.ponkratov.autored.presentation.ui.home.tab.history.details.RideDetailsLesseeFragment"
+        tools:layout="@layout/fragment_ride_details_lessee" >
         <argument android:name="rideResponse"
             app:argType="string"/>
         <action
@@ -32,7 +32,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_details_to_review"
-            app:destination="@id/fragment_add_review_lessor"
+            app:destination="@id/fragment_add_review_lessee"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -40,10 +40,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_add_review_lessor"
-        android:name="com.ponkratov.autored.presentation.ui.home.tab.history.review.AddReviewLessorFragment"
-        tools:layout="@layout/fragment_add_review_lessor" >
-        <argument android:name="lesseeId"
+        android:id="@+id/fragment_add_review_lessee"
+        android:name="com.ponkratov.autored.presentation.ui.home.tab.history.review.AddReviewLesseeFragment"
+        tools:layout="@layout/fragment_add_review_lessee" >
+        <argument android:name="lessorId"
             app:argType="string"/>
         <argument android:name="carId"
             app:argType="string"/>

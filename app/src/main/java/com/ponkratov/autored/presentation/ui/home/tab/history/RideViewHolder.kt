@@ -6,7 +6,7 @@ import com.ponkratov.autored.R
 import com.ponkratov.autored.databinding.ItemRideBinding
 import com.ponkratov.autored.domain.model.response.RideResponse
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class RideViewHolder(
     private val binding: ItemRideBinding,
@@ -15,7 +15,7 @@ class RideViewHolder(
 
     fun bind(item: RideResponse) {
         with(binding) {
-            carPhoto.load("http://10.0.2.2:8080/api/attachment/get/file/${item.advertisementResponse.photoPaths.last()}")
+            carPhoto.load(item.advertisementResponse.photoPaths.first())
             carName.text = binding.root.context.getString(
                 R.string.text_car_make_model_year,
                 item.advertisementResponse.car.make,
@@ -29,17 +29,10 @@ class RideViewHolder(
             textDateStart.text =
                 SimpleDateFormat("dd.MM.yyyy", Locale.US).format(item.ride.dateStart)
 
-            textDateEnd.text = if (item.ride.dateEnd == Date(0)) {
-                "по н.в."
-            } else {
-                SimpleDateFormat("dd.MM.yyyy", Locale.US).format(item.ride.dateEnd)
-            }
+            textDateEnd.text = SimpleDateFormat("dd.MM.yyyy", Locale.US).format(item.ride.dateEnd)
 
             textPricePerDay.text =
-                binding.root.context.getString(
-                    R.string.text_price,
-                    item.advertisementResponse.advertisement.pricePerDay
-                )
+                binding.root.context.getString(R.string.text_price, item.ride.totalCost)
 
             root.setOnClickListener {
                 onRideItemClicked(item)

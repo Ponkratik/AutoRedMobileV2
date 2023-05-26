@@ -15,19 +15,17 @@ class AdvertisementResponseViewHolder(
 
     fun bind(item: AdvertisementResponse) {
         with(binding) {
-            carPhoto.load("http://10.0.2.2:8080/api/attachment/get/file/${item.photoPaths.last()}")
+            carPhoto.load(item.photoPaths.first())
             carName.text = binding.root.context.getString(
                 R.string.text_car_make_model_year,
                 item.car.make,
                 item.car.model,
                 SimpleDateFormat("yyyy", Locale.US).format(item.car.manufacturedYear)
             )
-            //оценку добавить
-            textRate.text = "5.0"
+            textRate.text = item.avgMark.toString()
             textPricePerDay.text =
                 binding.root.context.getString(R.string.text_price, item.advertisement.pricePerDay)
-            //кол-во поездок
-            textRidesQty.text = "10 поездок"
+            textRidesQty.text = binding.root.context.getString(R.string.rides_qty, item.rides)
 
             root.setOnClickListener {
                 onAdvertisementItemClicked(item)

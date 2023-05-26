@@ -47,8 +47,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_header">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/review_on_car"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/container_review"
+            android:id="@+id/container_review_car"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,18 +68,18 @@
             app:hintTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_review"
+                android:id="@+id/edit_text_review_car"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/review"
                 android:inputType="textMultiLine"
-                android:lines="10"
+                android:lines="5"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
-            android:id="@+id/radio_group"
+            android:id="@+id/radio_group_car"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -78,7 +87,7 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/checkbox_5"
+                android:id="@+id/checkbox_5_car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/bordo_900"
@@ -86,7 +95,7 @@
                 android:textColor="@color/white" />
 
             <RadioButton
-                android:id="@+id/checkbox_4"
+                android:id="@+id/checkbox_4_car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/bordo_900"
@@ -94,7 +103,7 @@
                 android:textColor="@color/white" />
 
             <RadioButton
-                android:id="@+id/checkbox_3"
+                android:id="@+id/checkbox_3_car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/bordo_900"
@@ -102,7 +111,7 @@
                 android:textColor="@color/white" />
 
             <RadioButton
-                android:id="@+id/checkbox_2"
+                android:id="@+id/checkbox_2_car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/bordo_900"
@@ -110,7 +119,87 @@
                 android:textColor="@color/white" />
 
             <RadioButton
-                android:id="@+id/checkbox_1"
+                android:id="@+id/checkbox_1_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/bordo_900"
+                android:text="@string/_1"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/review_on_lessor"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/container_review_lessor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:errorEnabled="true"
+            app:hintTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_review_lessor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/review"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RadioGroup
+            android:id="@+id/radio_group_lessor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/checkbox_5_lessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/bordo_900"
+                android:text="@string/_5"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/checkbox_4_lessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/bordo_900"
+                android:text="@string/_4"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/checkbox_3_lessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/bordo_900"
+                android:text="@string/_3"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/checkbox_2_lessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/bordo_900"
+                android:text="@string/_2"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/checkbox_1_lessor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/bordo_900"

@@ -11,26 +11,27 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import com.ponkratov.autored.databinding.FragmentAddReviewLessorBinding
+import com.ponkratov.autored.databinding.FragmentAddReviewLesseeBinding
+import com.ponkratov.autored.domain.model.Lce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AddReviewLessorFragment : Fragment() {
+class AddReviewLesseeFragment : Fragment() {
 
-    private var _binding: FragmentAddReviewLessorBinding? = null
+    private var _binding: FragmentAddReviewLesseeBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val viewModel by viewModel<AddReviewLessorViewModel>()
+    private val viewModel by viewModel<AddReviewLesseeViewModel>()
 
-    private val args by navArgs<AddReviewLessorFragmentArgs>()
+    private val args by navArgs<AddReviewLesseeFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return FragmentAddReviewLessorBinding.inflate(inflater, container, false)
+        return FragmentAddReviewLesseeBinding.inflate(inflater, container, false)
             .also { _binding = it }
             .root
     }
@@ -73,53 +74,44 @@ class AddReviewLessorFragment : Fragment() {
                     carTo = args.carId,
                     markUser = markLessor,
                     commentUser = editTextReviewLessor.text.toString(),
-                    userTo = args.lesseeId
+                    userTo = args.lessorId
                 )
             }
 
             viewModel
-                .loadingFlow
+                .lceFlow
                 .onEach {
-                    progressCircular.isVisible = true
-                    layoutReview.isVisible = false
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .errorFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutReview.isVisible = true
-                    Snackbar.make(
-                        requireView(),
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .dataFlow
-                .onEach {
-                    progressCircular.isVisible = false
-                    layoutReview.isVisible = true
-                    editTextReviewCar.text?.clear()
-                    editTextReviewLessor.text?.clear()
-                    AlertDialog
-                        .Builder(requireContext())
-                        .setTitle("Отзыв")
-                        .setMessage(it)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setOnDismissListener {
-                            findNavController().navigateUp()
+                    when (it) {
+                        is Lce.Loading -> {
+                            progressCircular.isVisible = true
+                            layoutReview.isVisible = false
                         }
-                        .show()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel
-                .getResponseFlow
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                        is Lce.Content -> {
+                            progressCircular.isVisible = false
+                            layoutReview.isVisible = true
+                            editTextReviewCar.text?.clear()
+                            editTextReviewLessor.text?.clear()
+                            AlertDialog
+                                .Builder(requireContext())
+                                .setTitle("Отзыв")
+                                .setMessage(it.data)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .setOnDismissListener {
+                                    findNavController().navigateUp()
+                                }
+                                .show()
+                        }
+                        is Lce.Error -> {
+                            progressCircular.isVisible = false
+                            layoutReview.isVisible = true
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

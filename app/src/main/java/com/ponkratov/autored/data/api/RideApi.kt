@@ -2,20 +2,14 @@ package com.ponkratov.autored.data.api
 
 import com.ponkratov.autored.data.model.response.MessageResponseDTO
 import com.ponkratov.autored.data.model.response.RideResponseDTO
+import com.ponkratov.autored.domain.model.request.BookRequest
 import okhttp3.MultipartBody
 import retrofit2.http.*
-import java.util.Date
 
 interface RideApi {
 
-    @Multipart
     @POST("ride/book")
-    suspend fun bookRide(
-        @Part("advertisementId") advertisementId: String,
-        @Part("lessorId") lessorId: String,
-        @Part("dateStart") dateStart: Date,
-        @Part("dateEnd") dateEnd: Date
-    ): MessageResponseDTO
+    suspend fun bookRide(@Body bookRequest: BookRequest): MessageResponseDTO
 
     @POST("sign/before/lessor/{id}")
     suspend fun signActBeforeByLessor(

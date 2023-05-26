@@ -71,7 +71,7 @@ class AdvertisementDetailsFragment : Fragment() {
             val advertisementResponse =
                 Gson().fromJson(args.advertisementResponse, AdvertisementResponse::class.java)
 
-            imageAdapter.submitList(advertisementResponse.photoPaths.sortedDescending())
+            imageAdapter.submitList(advertisementResponse.photoPaths)
 
             carName.text = getString(
                 R.string.text_car_make_model_year,
@@ -79,7 +79,8 @@ class AdvertisementDetailsFragment : Fragment() {
                 advertisementResponse.car.model,
                 SimpleDateFormat("yyyy", Locale.US).format(advertisementResponse.car.manufacturedYear)
             )
-
+            textRate.text = advertisementResponse.avgMark.toString()
+            textRidesQty.text = getString(R.string.rides_qty, advertisementResponse.rides)
             textPricePerDay.text =
                 getString(R.string.text_price, advertisementResponse.advertisement.pricePerDay)
             textPricePerWeek.text =
@@ -106,7 +107,7 @@ class AdvertisementDetailsFragment : Fragment() {
             }
 
             buttonBook.setOnClickListener {
-                viewModel.onBookButtonClicked(advertisementResponse.advertisement.id)
+                BookDialog(advertisementResponse).show(childFragmentManager, "advertisement_book_dialog")
             }
 
             viewModel
@@ -123,7 +124,7 @@ class AdvertisementDetailsFragment : Fragment() {
                             AlertDialog
                                 .Builder(requireContext())
                                 .setTitle("Бронь")
-                                .setMessage(it.toString())
+                                .setMessage(it.data)
                                 .setPositiveButton(android.R.string.ok, null)
                                 .show()
                         }

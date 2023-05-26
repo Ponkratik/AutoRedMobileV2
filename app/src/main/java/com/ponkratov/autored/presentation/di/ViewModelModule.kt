@@ -2,14 +2,14 @@ package com.ponkratov.autored.presentation.di
 
 import com.ponkratov.autored.presentation.ui.home.tab.account.AccountViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.addadvertisement.AdvertisementAddViewModel
-import com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.RideDetailsLesseeViewModel
-import com.ponkratov.autored.presentation.ui.home.tab.account.ridelist.RideListLesseeViewModel
+import com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.RideDetailsLessorViewModel
+import com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review.AddReviewLessorViewModel
+import com.ponkratov.autored.presentation.ui.home.tab.account.ridelist.RideListLessorViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.settings.SettingsViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.support.SupportRequestViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.history.HistoryViewModel
-import com.ponkratov.autored.presentation.ui.home.tab.history.details.RideDetailsLessorViewModel
-import com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review.AddReviewLesseeViewModel
-import com.ponkratov.autored.presentation.ui.home.tab.history.review.AddReviewLessorViewModel
+import com.ponkratov.autored.presentation.ui.home.tab.history.details.RideDetailsLesseeViewModel
+import com.ponkratov.autored.presentation.ui.home.tab.history.review.AddReviewLesseeViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.search.details.AdvertisementDetailsViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.search.list.SearchViewModel
 import com.ponkratov.autored.presentation.ui.login.LoginViewModel
@@ -28,7 +28,7 @@ val viewModelModule = module {
     viewModelOf(::AdvertisementAddViewModel)
     viewModelOf(::HistoryViewModel)
     viewModelOf(::RideDetailsLessorViewModel)
-    viewModelOf(::RideListLesseeViewModel)
+    viewModelOf(::RideListLessorViewModel)
     viewModelOf(::RideDetailsLesseeViewModel)
     viewModelOf(::AddReviewLesseeViewModel)
     viewModelOf(::AddReviewLessorViewModel)
