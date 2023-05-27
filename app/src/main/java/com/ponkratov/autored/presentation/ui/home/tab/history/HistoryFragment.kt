@@ -27,7 +27,7 @@ class HistoryFragment : Fragment() {
             context = requireContext(),
             onRideClicked = {
                 findNavController().navigate(
-                    HistoryFragmentDirections.actionHistoryToDetails(Gson().toJson(it))
+                    HistoryFragmentDirections.actionHistoryToDetails(it.ride.id)
                 )
             }
         )

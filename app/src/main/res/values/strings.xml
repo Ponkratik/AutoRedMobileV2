@@ -106,4 +106,6 @@
     <string name="text_minus">---</string>
     <string name="text_advertisement">Объявление</string>
     <string name="text_rides_by_advertisement">Поездки по объявлению</string>
+    <string name="text_forward">Перейти</string>
+    <string name="text_created">Создана</string>
 </resources>

@@ -1,24 +1,33 @@
 package com.ponkratov.autored.presentation.ui.home.tab.history.details
 
 import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.ponkratov.autored.R
 import com.ponkratov.autored.databinding.FragmentRideDetailsLesseeBinding
+import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.domain.model.RideStatusEnum
 import com.ponkratov.autored.domain.model.response.RideResponse
 import com.ponkratov.autored.presentation.extensions.addHorisontalSpace
 import com.ponkratov.autored.presentation.ui.home.tab.search.details.ImageAdapter
+import com.ponkratov.autored.presentation.ui.registration.RegisterPhotoFragmentDirections
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
+
 
 class RideDetailsLesseeFragment : Fragment() {
 
@@ -49,14 +58,41 @@ class RideDetailsLesseeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            viewModel.updateInfo(args.rideId)
+
+            viewModel
+                .lceFlowInfo
+                .onEach {
+                    when (it) {
+                        is Lce.Loading -> {
+                            progressCircular.isVisible = true
+                            layoutRide.isVisible = false
+                        }
+                        is Lce.Content -> {
+                            progressCircular.isVisible = false
+                            initLayout(requireNotNull(it.data))
+                        }
+                        is Lce.Error -> {
+                            progressCircular.isVisible = false
+                            layoutRide.isVisible = true
+                            Snackbar.make(
+                                requireView(),
+                                it.message.toString(),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+    }
+
+    private fun initLayout(rideResponse: RideResponse) {
+        with(binding) {
             progressCircular.isVisible = false
             layoutRide.isVisible = true
 
             photoRecyclerView.adapter = imageAdapter
             photoRecyclerView.addHorisontalSpace()
-
-            val rideResponse =
-                Gson().fromJson(args.rideResponse, RideResponse::class.java)
 
             initButtons(rideResponse)
 
@@ -92,9 +128,6 @@ class RideDetailsLesseeFragment : Fragment() {
                     rideResponse.advertisementResponse.advertisement.pricePerMonth
                 )
 
-            textLinkChat.text = rideResponse.user.email
-            textLinkPayment.text = "Перейти"
-
             textReview.setOnClickListener {
                 findNavController().navigate(
                     RideDetailsLesseeFragmentDirections.actionDetailsToReview(
@@ -104,12 +137,17 @@ class RideDetailsLesseeFragment : Fragment() {
                 )
             }
 
-            textLinkPayment.setOnClickListener {
-                findNavController().navigate(RideDetailsLesseeFragmentDirections.actionDetailsToPayment())
+            textLinkChat.setOnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://t.me/${rideResponse.user.phone}"))
+                startActivity(browserIntent)
             }
 
             buttonBack.setOnClickListener {
                 findNavController().navigateUp()
+            }
+
+            buttonPayment.setOnClickListener {
+                findNavController().navigate(RideDetailsLesseeFragmentDirections.actionDetailsToPayment())
             }
 
             buttonSignAct.setOnClickListener {
@@ -132,44 +170,48 @@ class RideDetailsLesseeFragment : Fragment() {
                     .show()
             }
         }
-
     }
 
     private fun initButtons(rideResponse: RideResponse) {
         with(binding) {
-            when(rideResponse.ride.statusId.toInt()) {
-                RideStatusEnum.STATUS_BOOKED.ordinal + 1 -> {
+            when(rideResponse.ride.statusId) {
+                RideStatusEnum.STATUS_BOOKED.id -> {
                     textStatus.text = RideStatusEnum.STATUS_BOOKED.desc
-                    descriptionTable.isVisible = true
+                    infoTable.isVisible = true
                     buttonSignAct.isVisible = true
+                    buttonPayment.isVisible = false
                     buttonEndRide.isVisible = false
                     textReview.isVisible = false
                 }
-                RideStatusEnum.STATUS_SIGNED_BEFORE_LESSEE.ordinal + 1 -> {
+                RideStatusEnum.STATUS_SIGNED_BEFORE_LESSEE.id -> {
                     textStatus.text = RideStatusEnum.STATUS_SIGNED_BEFORE_LESSEE.desc
-                    descriptionTable.isVisible = true
+                    infoTable.isVisible = true
                     buttonSignAct.isVisible = false
+                    buttonPayment.isVisible = true
                     buttonEndRide.isVisible = false
                     textReview.isVisible = false
                 }
-                RideStatusEnum.STATUS_STARTED.ordinal + 1 -> {
+                RideStatusEnum.STATUS_STARTED.id -> {
                     textStatus.text = RideStatusEnum.STATUS_STARTED.desc
-                    descriptionTable.isVisible = true
+                    infoTable.isVisible = true
                     buttonSignAct.isVisible = false
+                    buttonPayment.isVisible = false
                     buttonEndRide.isVisible = false
                     textReview.isVisible = false
                 }
-                RideStatusEnum.STATUS_SIGNED_AFTER_LESSOR.ordinal + 1 -> {
+                RideStatusEnum.STATUS_SIGNED_AFTER_LESSOR.id -> {
                     textStatus.text = RideStatusEnum.STATUS_SIGNED_AFTER_LESSOR.desc
-                    descriptionTable.isVisible = true
+                    infoTable.isVisible = true
                     buttonSignAct.isVisible = false
+                    buttonPayment.isVisible = false
                     buttonEndRide.isVisible = true
                     textReview.isVisible = false
                 }
-                RideStatusEnum.STATUS_FINISHED.ordinal + 1 -> {
+                RideStatusEnum.STATUS_FINISHED.id -> {
                     textStatus.text = RideStatusEnum.STATUS_FINISHED.desc
-                    descriptionTable.isVisible = false
+                    infoTable.isVisible = false
                     buttonSignAct.isVisible = false
+                    buttonPayment.isVisible = false
                     buttonEndRide.isVisible = false
                     textReview.isVisible = true
                 }

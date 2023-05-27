@@ -64,4 +64,8 @@ class RideRepositoryImpl(
                 it.toDomain()
             }
         }
+
+    override suspend fun getRideResponseById(id: String): Result<RideResponse> = runCatching {
+        rideApi.getRideResponseById(id).toDomain()
+    }
 }

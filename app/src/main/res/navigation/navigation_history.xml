@@ -21,7 +21,7 @@
         android:id="@+id/fragment_ride_details_lessee"
         android:name="com.ponkratov.autored.presentation.ui.home.tab.history.details.RideDetailsLesseeFragment"
         tools:layout="@layout/fragment_ride_details_lessee" >
-        <argument android:name="rideResponse"
+        <argument android:name="rideId"
             app:argType="string"/>
         <action
             android:id="@+id/action_details_to_payment"

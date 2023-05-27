@@ -17,8 +17,9 @@ interface RideRepository {
 
     suspend fun signActAfterByLessee(rideId: String): Result<String>
 
-    suspend fun getRideResponsesByAdvertisementId(@Path("id") advertisementId: String): Result<List<RideResponse>>
+    suspend fun getRideResponsesByAdvertisementId(advertisementId: String): Result<List<RideResponse>>
 
-    suspend fun getRideResponsesByLessorId(@Path("id") lessorId: String): Result<List<RideResponse>>
+    suspend fun getRideResponsesByLessorId(lessorId: String): Result<List<RideResponse>>
 
+    suspend fun getRideResponseById(id: String): Result<RideResponse>
 }

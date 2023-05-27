@@ -25,4 +25,5 @@ val useCaseModule = module {
     singleOf(::SignActAfterByLesseeUseCase)
     singleOf(::ResetPasswordUseCase)
     singleOf(::SendVerificationEmailUseCase)
+    singleOf(::GetRideResponseByIdUseCase)
 }

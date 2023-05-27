@@ -38,4 +38,7 @@ interface RideApi {
 
     @GET("ride/get/all/full/lessor/{id}")
     suspend fun getRideResponsesByLessorId(@Path("id") lessorId: String): List<RideResponseDTO>
+
+    @GET("ride/get/full/{id}")
+    suspend fun getRideResponseById(@Path("id") rideId: String): RideResponseDTO
 }
