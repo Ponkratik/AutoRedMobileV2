@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,9 +20,9 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.ponkratov.autored.databinding.FragmentRegisterPhotoBinding
 import com.ponkratov.autored.domain.model.Lce
+import com.ponkratov.autored.presentation.utils.hasPermission
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.BuildConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -89,7 +87,7 @@ class RegisterPhotoFragment : Fragment() {
             progressCircular.isVisible = false
 
             buttonPhotoPassport.setOnClickListener {
-                if (hasPermission(Manifest.permission.CAMERA)) {
+                if (hasPermission(requireContext(), Manifest.permission.CAMERA)) {
                     getTmpFileUri().let { uri ->
                         latestPassportPhotoUri = uri
                         takePassportImageResult.launch(uri)
@@ -100,7 +98,7 @@ class RegisterPhotoFragment : Fragment() {
             }
 
             buttonPhotoDriverLicense.setOnClickListener {
-                if (hasPermission(Manifest.permission.CAMERA)) {
+                if (hasPermission(requireContext(), Manifest.permission.CAMERA)) {
                     getTmpFileUri().let { uri ->
                         latestDriverLicensePhotoUri = uri
                         takeDriverLicenseImageResult.launch(uri)
@@ -214,13 +212,6 @@ class RegisterPhotoFragment : Fragment() {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
         selectAvatarFromGalleryResult.launch(pickPhoto)
-    }
-
-    private fun hasPermission(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onDestroyView() {

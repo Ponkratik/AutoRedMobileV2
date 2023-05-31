@@ -1,19 +1,18 @@
 package com.ponkratov.autored.presentation.ui.home.tab.history.details
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.ponkratov.autored.databinding.FragmentDialogCheckupBinding
 import com.ponkratov.autored.presentation.extensions.addHorisontalSpace
 import com.ponkratov.autored.presentation.ui.home.tab.account.addadvertisement.ImageUriAdapter
+import com.ponkratov.autored.presentation.utils.hasPermission
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -67,7 +66,7 @@ class CheckupDialogLessee(private val rideId: String) : DialogFragment() {
             photoRecyclerView.addHorisontalSpace()
 
             buttonAddPhotosCheckup.setOnClickListener {
-                if (hasPermission(Manifest.permission.CAMERA)) {
+                if (hasPermission(requireContext(), Manifest.permission.CAMERA)) {
                     getTmpFileUri().let { uri ->
                         latestCheckupPhotoUri = uri
                         takeCheckupImageResult.launch(uri)
@@ -111,13 +110,6 @@ class CheckupDialogLessee(private val rideId: String) : DialogFragment() {
             "${requireContext().packageName}.provider",
             tmpFile
         )
-    }
-
-    private fun hasPermission(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onStart() {

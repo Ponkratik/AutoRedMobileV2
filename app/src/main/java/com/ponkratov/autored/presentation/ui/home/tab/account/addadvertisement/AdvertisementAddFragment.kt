@@ -2,7 +2,6 @@ package com.ponkratov.autored.presentation.ui.home.tab.account.addadvertisement
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +19,7 @@ import com.ponkratov.autored.databinding.FragmentAdvertisementAddBinding
 import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.presentation.extensions.addHorisontalSpace
 import com.ponkratov.autored.presentation.extensions.hideKeyboard
+import com.ponkratov.autored.presentation.utils.hasPermission
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -266,18 +265,11 @@ class AdvertisementAddFragment : Fragment() {
     }
 
     private fun openGalleryForImage() {
-        if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (hasPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
             selectImagesFromGallery.launch("image/*")
         } else {
             permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
-    }
-
-    private fun hasPermission(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onDestroyView() {
