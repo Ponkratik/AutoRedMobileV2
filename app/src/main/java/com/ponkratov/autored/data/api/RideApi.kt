@@ -11,26 +11,28 @@ interface RideApi {
     @POST("ride/book")
     suspend fun bookRide(@Body bookRequest: BookRequest): MessageResponseDTO
 
-    @POST("sign/before/lessor/{id}")
+    @POST("ride/sign/before/lessor/{id}")
     suspend fun signActBeforeByLessor(
-        @Path("rideId") rideId: String
+        @Path("id") rideId: String
     ): MessageResponseDTO
 
-    @POST("sign/before/lessee/{id}")
+    @Multipart
+    @POST("ride/sign/before/lessee/{id}")
     suspend fun signActBeforeByLessee(
-        @Path("rideId") rideId: String,
+        @Path("id") rideId: String,
         @Part files: List<MultipartBody.Part>
     ): MessageResponseDTO
 
-    @POST("sign/after/lessor/{id}")
+    @Multipart
+    @POST("ride/sign/after/lessor/{id}")
     suspend fun signActAfterByLessor(
-        @Path("rideId") rideId: String,
+        @Path("id") rideId: String,
         @Part files: List<MultipartBody.Part>
     ): MessageResponseDTO
 
-    @POST("sign/after/lessee/{id}")
+    @POST("ride/sign/after/lessee/{id}")
     suspend fun signActAfterByLessee(
-        @Path("rideId") rideId: String
+        @Path("id") rideId: String
     ): MessageResponseDTO
 
     @GET("ride/get/all/full/advertisement/{id}")

@@ -8,12 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.ponkratov.autored.R
 import com.ponkratov.autored.databinding.FragmentRideDetailsLesseeBinding
 import com.ponkratov.autored.domain.model.Lce
@@ -21,7 +21,6 @@ import com.ponkratov.autored.domain.model.RideStatusEnum
 import com.ponkratov.autored.domain.model.response.RideResponse
 import com.ponkratov.autored.presentation.extensions.addHorisontalSpace
 import com.ponkratov.autored.presentation.ui.home.tab.search.details.ImageAdapter
-import com.ponkratov.autored.presentation.ui.registration.RegisterPhotoFragmentDirections
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,6 +57,12 @@ class RideDetailsLesseeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            progressCircular.isVisible = false
+            layoutRide.isVisible = true
+
+            photoRecyclerView.adapter = imageAdapter
+            photoRecyclerView.addHorisontalSpace()
+
             viewModel.updateInfo(args.rideId)
 
             viewModel
@@ -68,13 +73,18 @@ class RideDetailsLesseeFragment : Fragment() {
                             progressCircular.isVisible = true
                             layoutRide.isVisible = false
                         }
+
                         is Lce.Content -> {
                             progressCircular.isVisible = false
+                            layoutRide.isVisible = true
+                            dismissChildDialog()
                             initLayout(requireNotNull(it.data))
                         }
+
                         is Lce.Error -> {
                             progressCircular.isVisible = false
                             layoutRide.isVisible = true
+                            dismissChildDialog()
                             Snackbar.make(
                                 requireView(),
                                 it.message.toString(),
@@ -86,14 +96,15 @@ class RideDetailsLesseeFragment : Fragment() {
         }
     }
 
+    private fun dismissChildDialog() {
+        val d = childFragmentManager.findFragmentByTag("ride_chechup_dialog")
+        if (d != null) {
+            (d as DialogFragment).dismiss()
+        }
+    }
+
     private fun initLayout(rideResponse: RideResponse) {
         with(binding) {
-            progressCircular.isVisible = false
-            layoutRide.isVisible = true
-
-            photoRecyclerView.adapter = imageAdapter
-            photoRecyclerView.addHorisontalSpace()
-
             initButtons(rideResponse)
 
             imageAdapter.submitList(rideResponse.advertisementResponse.photoPaths.sortedDescending())
@@ -110,7 +121,8 @@ class RideDetailsLesseeFragment : Fragment() {
 
             textRate.text = rideResponse.advertisementResponse.avgMark.toString()
 
-            textRidesQty.text = getString(R.string.rides_qty, rideResponse.advertisementResponse.rides)
+            textRidesQty.text =
+                getString(R.string.rides_qty, rideResponse.advertisementResponse.rides)
 
             textPricePerDay.text =
                 getString(
@@ -138,7 +150,11 @@ class RideDetailsLesseeFragment : Fragment() {
             }
 
             textLinkChat.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://t.me/${rideResponse.user.phone}"))
+                val browserIntent =
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(rideResponse.ride.chatLink + rideResponse.user.phone)
+                    )
                 startActivity(browserIntent)
             }
 
@@ -147,17 +163,14 @@ class RideDetailsLesseeFragment : Fragment() {
             }
 
             buttonPayment.setOnClickListener {
-                findNavController().navigate(RideDetailsLesseeFragmentDirections.actionDetailsToPayment())
+                viewModel.updateInfo(rideResponse.ride.id)
             }
 
             buttonSignAct.setOnClickListener {
-                AlertDialog
-                    .Builder(requireContext())
-                    .setTitle("Подписание акта")
-                    .setMessage("Нажимая на кнопку \"ОК\" вы подтверждаете ознакомление с условиями сервиса")
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
+                CheckupDialogLessee(rideResponse.ride.id).show(
+                    childFragmentManager,
+                    "ride_chechup_dialog"
+                )
             }
 
             buttonEndRide.setOnClickListener {
@@ -165,7 +178,9 @@ class RideDetailsLesseeFragment : Fragment() {
                     .Builder(requireContext())
                     .setTitle("Завершение поездки")
                     .setMessage("Нажимая на кнопку \"ОК\" вы подтверждаете ознакомление с условиями сервиса")
-                    .setPositiveButton(android.R.string.ok, null)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        viewModel.endRide(rideResponse.ride.id)
+                    }
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
             }
@@ -174,43 +189,62 @@ class RideDetailsLesseeFragment : Fragment() {
 
     private fun initButtons(rideResponse: RideResponse) {
         with(binding) {
-            when(rideResponse.ride.statusId) {
+            when (rideResponse.ride.statusId) {
                 RideStatusEnum.STATUS_BOOKED.id -> {
                     textStatus.text = RideStatusEnum.STATUS_BOOKED.desc
                     infoTable.isVisible = true
                     buttonSignAct.isVisible = true
+                    tableRowPayment.isVisible = false
                     buttonPayment.isVisible = false
                     buttonEndRide.isVisible = false
                     textReview.isVisible = false
                 }
+
                 RideStatusEnum.STATUS_SIGNED_BEFORE_LESSEE.id -> {
                     textStatus.text = RideStatusEnum.STATUS_SIGNED_BEFORE_LESSEE.desc
                     infoTable.isVisible = true
                     buttonSignAct.isVisible = false
+                    tableRowPayment.isVisible = true
                     buttonPayment.isVisible = true
                     buttonEndRide.isVisible = false
                     textReview.isVisible = false
                 }
-                RideStatusEnum.STATUS_STARTED.id -> {
-                    textStatus.text = RideStatusEnum.STATUS_STARTED.desc
+
+                RideStatusEnum.STATUS_PAYED.id -> {
+                    textStatus.text = RideStatusEnum.STATUS_PAYED.desc
                     infoTable.isVisible = true
                     buttonSignAct.isVisible = false
+                    tableRowPayment.isVisible = false
                     buttonPayment.isVisible = false
                     buttonEndRide.isVisible = false
                     textReview.isVisible = false
                 }
+
+                RideStatusEnum.STATUS_STARTED.id -> {
+                    textStatus.text = RideStatusEnum.STATUS_STARTED.desc
+                    infoTable.isVisible = true
+                    buttonSignAct.isVisible = false
+                    tableRowPayment.isVisible = false
+                    buttonPayment.isVisible = false
+                    buttonEndRide.isVisible = false
+                    textReview.isVisible = false
+                }
+
                 RideStatusEnum.STATUS_SIGNED_AFTER_LESSOR.id -> {
                     textStatus.text = RideStatusEnum.STATUS_SIGNED_AFTER_LESSOR.desc
                     infoTable.isVisible = true
                     buttonSignAct.isVisible = false
+                    tableRowPayment.isVisible = false
                     buttonPayment.isVisible = false
                     buttonEndRide.isVisible = true
                     textReview.isVisible = false
                 }
+
                 RideStatusEnum.STATUS_FINISHED.id -> {
                     textStatus.text = RideStatusEnum.STATUS_FINISHED.desc
                     infoTable.isVisible = false
                     buttonSignAct.isVisible = false
+                    tableRowPayment.isVisible = false
                     buttonPayment.isVisible = false
                     buttonEndRide.isVisible = false
                     textReview.isVisible = true

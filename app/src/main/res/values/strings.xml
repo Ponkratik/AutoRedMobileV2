@@ -108,4 +108,9 @@
     <string name="text_rides_by_advertisement">Поездки по объявлению</string>
     <string name="text_forward">Перейти</string>
     <string name="text_created">Создана</string>
+    <string name="text_payment">Ссылка на оплату</string>
+    <string name="text_dialog_book">Перед подписанием акта необходимо произвести фотоконтроль автомобиля. Нажав на кнопку \"Добавить\", откроется камера. После создания снимка камера закроется. Для добавления еще одной фотографии повторите предыдущее действие.\n\nНажав кнопку \"Подписать\", вы соглааетесь с условиями сервиса.</string>
+    <string name="add">Добавить</string>
+    <string name="text_sign">Подписать</string>
+    <string name="text_check_payment">Проверить оплату</string>
 </resources>

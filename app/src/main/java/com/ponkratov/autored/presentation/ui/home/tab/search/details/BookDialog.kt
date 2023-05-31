@@ -1,11 +1,9 @@
 package com.ponkratov.autored.presentation.ui.home.tab.search.details
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -14,7 +12,6 @@ import com.ponkratov.autored.domain.model.response.AdvertisementResponse
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -22,7 +19,7 @@ class BookDialog(private val advertisementResponse: AdvertisementResponse) : Dia
     private var _binding: FragmentDialogBookBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val viewModel by viewModel<AdvertisementDetailsViewModel>()
+    private val viewModel by viewModel<AdvertisementDetailsViewModel>(owner = {requireParentFragment()})
 
     override fun onCreateView(
         inflater: LayoutInflater,
