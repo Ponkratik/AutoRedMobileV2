@@ -52,10 +52,10 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:padding="8dp"
-            android:text="Test test test"
             android:textColor="@color/white"
             android:textSize="24sp"
-            app:layout_constraintTop_toBottomOf="@id/text_header" />
+            app:layout_constraintTop_toBottomOf="@id/text_header"
+            tools:text="Test test test" />
 
         <TableRow
             android:id="@+id/row_rate"
@@ -72,7 +72,7 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
-                android:text="5.0"
+                tools:text="5.0"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -112,34 +112,53 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
-                android:text="Поездка завершена"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:text="Поездка завершена" />
         </TableRow>
 
         <TextView
             android:id="@+id/text_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/post_review"
-            android:textAlignment="center"
             android:paddingTop="8dp"
             android:paddingBottom="16dp"
+            android:text="@string/post_review"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@+id/row_status" />
 
         <TableLayout
-            android:id="@+id/description_table"
+            android:id="@+id/info_table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
             android:stretchColumns="1"
             app:layout_constraintTop_toBottomOf="@id/text_review">
 
-            <TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <TextView
-                    android:padding="3dip"
+                    android:text="@string/text_total_cost"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/text_total_cost"
+                    android:gravity="end"
+                    android:text="@string/text_price"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
                     android:text="@string/link_chat"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -147,29 +166,10 @@
                 <TextView
                     android:id="@+id/text_link_chat"
                     android:gravity="end"
-                    android:padding="3dip"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    tools:text="Седан" />
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:padding="3dip"
-                    android:text="@string/link_payment"
+                    android:text="@string/text_forward"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/text_link_payment"
-                    android:gravity="end"
-                    android:padding="3dip"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    tools:text="Седан" />
             </TableRow>
-
         </TableLayout>
 
         <Button
@@ -177,35 +177,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="75dp"
-            android:layout_marginVertical="32dp"
+            android:layout_marginTop="48dp"
             android:background="@drawable/round_rectangle"
             android:text="@string/sign_act"
-            android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_table" />
-
-        <Button
-            android:id="@+id/button_start_ride"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="75dp"
-            android:layout_marginVertical="32dp"
-            android:background="@drawable/round_rectangle"
-            android:text="@string/start_ride"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_table" />
+            app:layout_constraintTop_toBottomOf="@id/info_table" />
 
         <Button
             android:id="@+id/button_end_ride"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="75dp"
-            android:layout_marginVertical="32dp"
+            android:layout_marginTop="48dp"
             android:background="@drawable/round_rectangle"
             android:text="@string/end_ride"
-            android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_table" />
+            app:layout_constraintTop_toBottomOf="@id/info_table" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

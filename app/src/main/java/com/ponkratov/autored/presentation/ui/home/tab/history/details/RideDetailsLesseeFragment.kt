@@ -153,7 +153,7 @@ class RideDetailsLesseeFragment : Fragment() {
                 val browserIntent =
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(rideResponse.ride.chatLink + rideResponse.user.phone)
+                        Uri.parse(rideResponse.ride.chatLink + rideResponse.advertisementResponse.advertisement.userId)
                     )
                 startActivity(browserIntent)
             }

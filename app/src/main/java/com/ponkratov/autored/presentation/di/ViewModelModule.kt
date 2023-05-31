@@ -3,7 +3,7 @@ package com.ponkratov.autored.presentation.di
 import com.ponkratov.autored.presentation.ui.home.tab.account.AccountViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.addadvertisement.AdvertisementAddViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.RideDetailsLessorViewModel
-import com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review.AddReviewLessorViewModel
+import com.ponkratov.autored.presentation.ui.home.tab.account.review.AddReviewLessorViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.ridelist.RideListLessorViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.settings.SettingsViewModel
 import com.ponkratov.autored.presentation.ui.home.tab.account.support.SupportRequestViewModel

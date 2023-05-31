@@ -31,7 +31,7 @@ class RideListLessorFragment : Fragment() {
             context = requireContext(),
             onRideClicked = {
                 findNavController().navigate(
-                    RideListLessorFragmentDirections.actionRideListToRideDetailsLessor(Gson().toJson(it))
+                    RideListLessorFragmentDirections.actionRideListToRideDetailsLessor(it.ride.id)
                 )
             }
         )

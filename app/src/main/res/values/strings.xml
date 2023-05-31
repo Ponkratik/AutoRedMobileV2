@@ -113,4 +113,5 @@
     <string name="add">Добавить</string>
     <string name="text_sign">Подписать</string>
     <string name="text_check_payment">Проверить оплату</string>
+    <string name="text_total_cost">Стоимость</string>
 </resources>

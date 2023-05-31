@@ -1,4 +1,4 @@
-package com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review
+package com.ponkratov.autored.presentation.ui.home.tab.account.review
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

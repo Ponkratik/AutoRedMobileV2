@@ -1,4 +1,4 @@
-package com.ponkratov.autored.presentation.ui.home.tab.account.ridedetails.review
+package com.ponkratov.autored.presentation.ui.home.tab.account.review
 
 import android.app.AlertDialog
 import android.os.Bundle
