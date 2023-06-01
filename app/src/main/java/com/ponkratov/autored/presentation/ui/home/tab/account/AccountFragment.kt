@@ -13,7 +13,6 @@ import com.google.gson.Gson
 import com.ponkratov.autored.databinding.FragmentAccountBinding
 import com.ponkratov.autored.domain.model.Lce
 import com.ponkratov.autored.presentation.extensions.addVerticalSpace
-import com.ponkratov.autored.presentation.ui.home.tab.search.list.AdvertisementAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,7 +24,7 @@ class AccountFragment : Fragment() {
     private val viewModel by viewModel<AccountViewModel>()
 
     private val adapter by lazy {
-        AdvertisementAdapter(
+        AdvertisementLessorAdapter(
             context = requireContext(),
             onAdvertisementClicked = {
                 findNavController().navigate(
